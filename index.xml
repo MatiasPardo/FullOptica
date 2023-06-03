@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Aplicación de React</title>
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone/babel.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      // Definir el componente de React
+      class HelloWorld extends React.Component {
+        render() {
+          return <h1>Hola Mundo</h1>;
+        }
+      }
+
+      // Renderizar el componente en el elemento con id "root"
+      ReactDOM.render(<HelloWorld />, document.getElementById("root"));
+    </script>
+  </body>
+</html>
