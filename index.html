@@ -1,24 +1,237 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Aplicación de React</title>
-    <script src="https://unpkg.com/react/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/babel-standalone/babel.js"></script>
-  </head>
-  <body>
-    <div id="root"></div>
+<head>
+  <title>Presentación de Pablo Matias Pardo</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <style>
+    /* Estilos adicionales */
+    body {
+      background: linear-gradient(45deg, #00aeff, #0072ff);
+      color: #333; /* Cambiar el color del texto */
+      padding-top: 100px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 40px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .btn {
+      margin-top: 10px;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 16px;
+      transition: all 0.3s ease-in-out;
+    }
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    /* Estilos para animaciones */
+    .animated-link {
+      position: relative;
+      display: inline-block;
+      color: #007bff;
+      text-decoration: none;
+      transition: all 0.3s ease-in-out;
+    }
+    .animated-link::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: #007bff;
+      visibility: hidden;
+      transform: scaleX(0);
+      transition: all 0.3s ease-in-out;
+    }
+    .animated-link:hover::before {
+      visibility: visible;
+      transform: scaleX(1);
+    }
+    /* Estilos para la cuadrícula */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 20px;
+      text-align: left;
+    }
+    .grid-item {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+    }
+    /* Estilos para la presentación */
+    .presentation {
+      text-align: right;
+    }
+    .abstract {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    /* Estilos para el layer */
+    .layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.5s;
+      z-index: 9999;
+    }
+    .layer-content {
+      background-color: #fff;
+      padding: 20px;
+      max-width: 600px;
+      max-height: 80%;
+      overflow: auto;
+    }
+    .layer-show {
+      visibility: visible;
+      opacity: 1;
+    }
+    .close-layer {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      color: #333;
+      cursor: pointer;
+    }
+    .layer-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .layer-description {
+      margin-bottom: 20px;
+    }
+    .layer-repo {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .layer-repo .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+    }
+    .layer-repo .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+    }
+    .layer-buttons {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-button {
+      display: inline-block;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 16px;
+      transition: all 0.3s ease-in-out;
+      cursor: pointer;
+    }
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="presentation">
+          <h1>Pablo Matias Pardo</h1>
+          <p class="abstract">Como diseñador de interfaces de usuario y experiencia del usuario, soy un apasionado del desarrollo limpio, las tecnologías innovadoras y reutilizables, y la comprensión de diferentes arquitecturas de sistemas. A través de mi experiencia y conocimientos, busco fomentar el crecimiento profesional y el dominio de habilidades clave en el campo de la tecnología.</p>
+          <div class="text-center">
+            <a class="btn btn-primary" href="https://www.linkedin.com/in/mspardos/" target="_blank">LinkedIn</a>
+            <a class="btn btn-primary" href="https://github.com/MatiasPardo" target="_blank">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row grid-container">
+      <div class="col-md-6 grid-item">
+        <h3>Email API</h3>
+        <p>Una aplicación de Spring Boot que proporciona una API para enviar correos electrónicos de forma programática. El repositorio contiene el código fuente y la documentación para utilizar esta API.</p>
+        <a class="btn btn-primary open-layer" href="#" data-title="Email API" data-description="Una aplicación de Spring Boot que proporciona una API para enviar correos electrónicos de forma programática." data-repo="https://github.com/MatiasPardo/EmailAPI">Ver más</a>
+      </div>
+      <div class="col-md-6 grid-item">
+        <h3>SDK Propias de diferentes e-commerce</h3>
+        <p>SDK (Software Development Kit) personalizados para diferentes plataformas de e-commerce, incluyendo Producteca, TiendaNube y Magento2. Estos SDK facilitan la integración y desarrollo de aplicaciones para estas plataformas.</p>
+        <a class="btn btn-primary open-layer" href="#" data-title="SDK Propias de diferentes e-commerce" data-description="SDK (Software Development Kit) personalizados para diferentes plataformas de e-commerce, incluyendo Producteca, TiendaNube y Magento2." data-repo="https://github.com/MatiasPardo/Producteca">Ver más</a>
+      </div>
+    </div>
+  </div>
 
-    <script type="text/babel">
-      // Definir el componente de React
-      class HelloWorld extends React.Component {
-        render() {
-          return <h1>Hola Mundo</h1>;
-        }
-      }
+  <!-- Capa emergente -->
+  <div class="layer">
+    <div class="layer-content">
+      <span class="close-layer">&times;</span>
+      <h2 class="layer-title"></h2>
+      <p class="layer-description"></p>
+      <div class="layer-repo">
+        <a class="btn btn-primary" href="#" target="_blank">Ver repositorio</a>
+      </div>
+      <div class="layer-buttons">
+        <button class="back-button">Volver</button>
+      </div>
+    </div>
+  </div>
 
-      // Renderizar el componente en el elemento con id "root"
-      ReactDOM.render(<HelloWorld />, document.getElementById("root"));
-    </script>
-  </body>
+  <script>
+    // Obtener los elementos relevantes
+    const layer = document.querySelector('.layer');
+    const closeButton = layer.querySelector('.close-layer');
+    const backButton = layer.querySelector('.back-button');
+    const layerTitle = layer.querySelector('.layer-title');
+    const layerDescription = layer.querySelector('.layer-description');
+    const layerRepo = layer.querySelector('.layer-repo a');
+
+    // Función para abrir la capa emergente
+    function openLayer(event) {
+      event.preventDefault();
+      const button = event.target;
+      const title = button.getAttribute('data-title');
+      const description = button.getAttribute('data-description');
+      const repo = button.getAttribute('data-repo');
+      layerTitle.textContent = title;
+      layerDescription.textContent = description;
+      layerRepo.setAttribute('href', repo);
+      layer.classList.add('layer-show');
+    }
+
+    // Función para cerrar la capa emergente
+    function closeLayer() {
+      layer.classList.remove('layer-show');
+    }
+
+    // Asignar eventos a los botones
+    const openLayerButtons = document.querySelectorAll('.open-layer');
+    openLayerButtons.forEach((button) => {
+      button.addEventListener('click', openLayer);
+    });
+    closeButton.addEventListener('click', closeLayer);
+    backButton.addEventListener('click', closeLayer);
+  </script>
+
+  <script>
+    // Mensaje adicional
+    console.log("Esta página fue construida con el poder de ChatGPT, una potente herramienta de generación de texto desarrollada por OpenAI. Además, el autor es un apasionado de la Inteligencia Artificial y las tecnologías relacionadas, incluyendo el Aprendizaje Automático (Machine Learning), el Procesamiento del Lenguaje Natural (NLP) y las Redes Neuronales Artificiales (ANN), que están revolucionando la forma en que interactuamos con la tecnología y crean nuevas oportunidades en diversos campos como la salud, la educación y los negocios.");
+  </script>
+</body>
 </html>
