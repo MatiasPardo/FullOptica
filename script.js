@@ -61,5 +61,70 @@ function openLayer(title, description, repo) {
   backButton.addEventListener('click', function() {
     closeLayer();
   });
+
+  
+  var bugController, spiderController;
+  var bugsEnabled = true;
+  
+  function setBugs(bogarak, pokok) {
+    bugController = new BugController({
+      'minDelay': 500,
+      'maxDelay': 505,
+      'imageSprite': "https://pranx.com/images/fly-sprite.png",
+      'minBugs': bogarak,
+      'maxBugs': bogarak,
+      'mouseOver': 'flyoff'
+    });
+  
+    spiderController = new SpiderController({
+      'minDelay': 1500,
+      'maxDelay': 1505,
+      'imageSprite': "https://pranx.com/images/spider-sprite.png",
+      'minBugs': pokok,
+      'maxBugs': pokok,
+      'mouseOver': 'die'
+    });
+  }
+  
+  function showWelcomePopup() {
+    document.getElementById('welcomePopup').style.display = 'block';
+  }
+  
+  function hideWelcomePopup() {
+    document.getElementById('welcomePopup').style.display = 'none';
+    setTimeout(function() {
+      setBugs(5, 3);
+    }, 1000); // Esperar 1 segundo antes de mostrar los insectos y las arañas
+    
+    // Mostrar u ocultar los insectos y las arañas según el estado actual de bugsEnabled
+    if (bugsEnabled) {
+      bugController.show();
+      spiderController.show();
+    } else {
+      bugController.hide();
+      spiderController.hide();
+    }
+  }
+  
+  function toggleBugs() {
+    bugsEnabled = !bugsEnabled;
+    
+    // Cambiar el nombre y la funcionalidad del botón según el estado actual de bugsEnabled
+    var toggleButton = document.getElementById('toggleButton');
+    if (bugsEnabled) {
+      toggleButton.textContent = 'Desactivar insectos y arañas';
+    } else {
+      toggleButton.textContent = 'Activar insectos y arañas';
+    }
+  }
+  
+  document.getElementById('closeWelcomePopup').addEventListener('click', hideWelcomePopup);
+  window.addEventListener('load', showWelcomePopup);
+  document.getElementById('toggleButton').addEventListener('click', toggleBugs);
+  
+
+  
+  
+  
   
   
