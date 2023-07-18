@@ -16,7 +16,7 @@ persistence.xml.
 	<session-factory>
 
 		<!-- Tomcat + PostgreSQL -->
-        <property name="hibernate.connection.datasource">java:comp/env/jdbc/FacturacionDS</property>
+        <property name="hibernate.connection.datasource">java:comp/env/jdbc/FullOpticaDS</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
         <property name="hibernate.jdbc.use_get_generated_keys">false</property>
         <property name="hibernate.show_sql">false</property>
