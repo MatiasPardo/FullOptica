@@ -1,0 +1,81 @@
+<?xml version = "1.0" encoding = "ISO-8859-1"?>
+
+<!DOCTYPE controllers SYSTEM "dtds/controllers.dtd">
+
+<controladores>
+    
+    <var-entorno nombre="XAVA_SEARCH_ACTION" valor="BasicBusiness.edit"/>
+    	
+    <controller name="TipicoSinImportacion">		
+		<extends controller="Navigation"/>
+		<extends controller="CRUD"/>
+		<extends controller="Print"/>
+		<action name="generateExcel" mode="list"
+            class="org.openxava.report.action.GenerateReportBussinesAction"
+            image="excel.gif"
+            icon="file-excel">
+            <set property="type" value="xls"/>  
+        </action>
+        
+        <action name="myReports" mode="list"
+			class="org.openxava.actions.MyReportsAction"
+			image="reports.png"
+			icon="library-books">	
+		</action>
+	</controller>
+	
+    <controller name="BasicBusiness">
+	  <extends controller="TipicoSinImportacion"/>
+	  	<action name="save" mode="detail"
+		    	by-default="if-possible" 
+				class="org.openxava.actions.SaveBasicBusinessAction"
+				image="save.gif"
+				icon="content-save">
+				<set property="refreshAfter" value="true"/>	
+				<set property="resetAfter" value="false"/>	
+		</action>
+		<action name="new" 
+				class="org.openxava.actions.NewBasicBusinessAction"
+				image="new.gif"
+				icon="library-plus">
+				<set property="restoreModel" value="true"/>	
+		</action>				
+		<action name="edit" 
+				mode="detail"
+				by-default="if-possible" 
+				hidden="true"
+				class="org.openxava.actions.EditBasicBusinessAction">
+		</action>
+		<action name="editarConOnChange" 
+				mode="detail"
+				by-default="if-possible" 
+				hidden="true"
+				class="org.openxava.base.actions.EditarOnChangeObjetoNegocioAction">
+		</action>
+		<action name="deleteSelected"
+		    	mode="list" 
+				class="org.openxava.actions.DeleteSelectedAction"
+				hidden="true">
+		</action>
+	</controller>
+	
+		
+    <!-- Environment variable:
+    <env-var name="FullOptica_DEFAULT_YEAR" value="2015"/> 
+    -->
+    
+    <!-- Session object:
+    <object name="FullOptica_activeYear" class="java.lang.Integer" value="2015" 
+    	    scope="global"/>    
+    -->
+    
+    <!-- Controller:
+    <controller name="Teacher">
+    	<extends controller="Typical"/>
+    	<action name="new" icon="library-plus" keystroke="Control N"
+        	class="actions.CreateTeacher">
+    	</action>
+	</controller>    
+    -->
+    
+</controladores>
