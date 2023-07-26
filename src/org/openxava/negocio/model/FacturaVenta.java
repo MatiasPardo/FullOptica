@@ -13,14 +13,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 
+import org.hibernate.validator.constraints.Length;
+import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
 import org.openxava.annotations.ListProperties;
 import org.openxava.annotations.NoCreate;
 import org.openxava.annotations.NoModify;
 import org.openxava.annotations.ReadOnly;
+import org.openxava.annotations.Stereotype;
 import org.openxava.annotations.View;
 import org.openxava.model.Estado;
 import org.openxava.negocio.base.MovementTransactional;
+import org.openxava.negocio.calculators.DefaultValuCalculatorMedioDePago;
 
 @View(members="fecha, empresa, retirado;"
 		+ "estado, numero;"
@@ -29,7 +33,8 @@ import org.openxava.negocio.base.MovementTransactional;
 		+ "items;"
 		+ "Totales["
 		+ "totalSinDescuento, total;"
-		+ "senia, saldo]")
+		+ "senia, saldo];"
+		+ "observaciones")
 @Entity
 public class FacturaVenta extends MovementTransactional{
 
@@ -59,9 +64,14 @@ public class FacturaVenta extends MovementTransactional{
 	@ReadOnly
 	private Boolean retirado;
 	
+	@Stereotype("MEMO")
+	@Length(max=255)
+	private String observaciones;
+	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	@DescriptionsList(descriptionProperties="nombre")
 	@NoCreate @NoModify
+	@DefaultValueCalculator(DefaultValuCalculatorMedioDePago.class)
 	private MedioDePago medioDePago;
 
 	
@@ -169,6 +179,14 @@ public class FacturaVenta extends MovementTransactional{
 
 	public void setRetirado(Boolean retiroCliente) {
 		this.retirado = retiroCliente;
+	}
+
+	public String getObservaciones() {
+		return observaciones;
+	}
+
+	public void setObservaciones(String observaciones) {
+		this.observaciones = observaciones;
 	}
 
 }
