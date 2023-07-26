@@ -1,4 +1,4 @@
-package org.openxava.actions;
+package org.openxava.negocio.calculators;
 
 import org.openxava.calculators.ICalculator;
 import org.openxava.negocio.model.Domicilio;

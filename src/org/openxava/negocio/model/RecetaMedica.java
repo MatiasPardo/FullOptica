@@ -6,42 +6,51 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 import org.openxava.annotations.DescriptionsList;
+import org.openxava.annotations.NoCreate;
+import org.openxava.annotations.NoModify;
 import org.openxava.annotations.ReferenceView;
+import org.openxava.annotations.Required;
 import org.openxava.annotations.View;
 import org.openxava.annotations.Views;
 import org.openxava.negocio.base.MovementTransactional;
 
 @Views({
-		@View(members=""
-				+ "cliente; "
-				+ "empresa, numeroDeSobre;"
-				+ "tipoDeLente, material;"
-				+ "distanciaInterPupilar;"
-				+ "graduacion;")
+	@View(members="empresa;"
+			+ "numeroDeSobre, numeroLaboratorio;"
+			+ "tipoDeLente, distanciaInterPupilar;"
+			+ "graduacion;"),
+	@View(name="FacturaVenta",  members=""
+			+ "numeroDeSobre, numeroLaboratorio;"
+			+ "tipoDeLente, distanciaInterPupilar;"
+			+ "graduacion;")
 })
 
 @Entity
 public class RecetaMedica extends MovementTransactional {
 
-	@ManyToOne(optional=false, fetch=FetchType.LAZY)
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
 	@ReferenceView("simple")
 	private Cliente cliente;
 
 	@Embedded
 	private Graduacion graduacion;
 	
+	@Required
 	private String numeroDeSobre;
 	
-	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	@DescriptionsList(descriptionProperties="nombre")
+	@NoCreate @NoModify
 	private TipoLente tipoDeLente;
 	
 	private String distanciaInterPupilar;
 	
-	@ManyToOne(optional=true, fetch=FetchType.LAZY)
-	@DescriptionsList(descriptionProperties="nombre")
-	private MaterialLente material;
+	private String numeroLaboratorio;
 
+	public String viewName(org.openxava.view.View view) {
+		view.getAllValues();
+		return "FacturaVenta";
+	}
 	public Cliente getCliente() {
 		return cliente;
 	}
@@ -81,14 +90,13 @@ public class RecetaMedica extends MovementTransactional {
 	public void setDistanciaInterPupilar(String distanciaInterPupilar) {
 		this.distanciaInterPupilar = distanciaInterPupilar;
 	}
-
-	public MaterialLente getMaterial() {
-		return material;
+	public String getNumeroLaboratorio() {
+		return numeroLaboratorio;
+	}
+	public void setNumeroLaboratorio(String numeroLaboratorio) {
+		this.numeroLaboratorio = numeroLaboratorio;
 	}
 
-	public void setMaterial(MaterialLente material) {
-		this.material = material;
-	}
 	
 }
 

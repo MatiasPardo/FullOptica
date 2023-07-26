@@ -6,12 +6,13 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import org.openxava.actions.DefaultValueCalculatorDateNow;
-import org.openxava.actions.DefaultValueCalculatorEmpresa;
-import org.openxava.actions.DefaultValueCalculatorState;
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
+import org.openxava.annotations.ReadOnly;
 import org.openxava.model.Estado;
+import org.openxava.negocio.calculators.DefaultValueCalculatorDateNow;
+import org.openxava.negocio.calculators.DefaultValueCalculatorEmpresa;
+import org.openxava.negocio.calculators.DefaultValueCalculatorState;
 import org.openxava.negocio.model.Empresa;
 
 @MappedSuperclass
@@ -20,11 +21,14 @@ public abstract class MovementTransactional extends BasicBusiness {
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	@DescriptionsList(descriptionProperties="nombre")
     @DefaultValueCalculator(DefaultValueCalculatorEmpresa.class)
+	@ReadOnly
 	private Empresa empresa;
 	
     @DefaultValueCalculator(DefaultValueCalculatorState.class)
+    @ReadOnly
 	public Estado estado;
 	
+    @ReadOnly
 	public String numero;
 	
     @DefaultValueCalculator(DefaultValueCalculatorDateNow.class)

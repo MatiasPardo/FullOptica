@@ -15,14 +15,17 @@ import javax.persistence.PostLoad;
 
 import org.openxava.annotations.DescriptionsList;
 import org.openxava.annotations.ListProperties;
+import org.openxava.annotations.NoCreate;
+import org.openxava.annotations.NoModify;
 import org.openxava.annotations.ReadOnly;
 import org.openxava.annotations.View;
 import org.openxava.model.Estado;
 import org.openxava.negocio.base.MovementTransactional;
 
-@View(members="fecha, empresa;"
+@View(members="fecha, empresa, retirado;"
 		+ "estado, numero;"
 		+ "cliente, receta;"
+		+ "medioDePago;"
 		+ "items;"
 		+ "Totales["
 		+ "totalSinDescuento, total;"
@@ -31,29 +34,35 @@ import org.openxava.negocio.base.MovementTransactional;
 public class FacturaVenta extends MovementTransactional{
 
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@DescriptionsList(descriptionProperties="apellido, nombre, codigo ")
+	@DescriptionsList(descriptionProperties="apellido, nombre, numeroDocumento")
 	private Cliente cliente;
 	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
-	@DescriptionsList(descriptionProperties="numeroDeSobre, tipoDeLente.nombre, material.nombre")
+	@DescriptionsList(descriptionProperties="numeroDeSobre, tipoDeLente.nombre")
 	private RecetaMedica receta;
 	
 	@OneToMany(mappedBy="venta", cascade=CascadeType.ALL)
-	@ListProperties("producto.codigo, producto.nombre, cantidad, descuento, precio")	
+	@ListProperties("producto.codigo, producto.nombre, cantidad, descuento, precio, subTotal")	
 	private Collection<ItemFacturaVenta> items;
 	
 	@ReadOnly
 	private BigDecimal saldo = BigDecimal.ZERO;
 	
+	@ReadOnly
 	private BigDecimal totalSinDescuento = BigDecimal.ZERO;
 	
+	@ReadOnly
 	private BigDecimal total;
 	
 	private BigDecimal senia;
 	
-	@ManyToOne
+	@ReadOnly
+	private Boolean retirado;
+	
+	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	@DescriptionsList(descriptionProperties="nombre")
-	private MetodoPago metodoDePago;
+	@NoCreate @NoModify
+	private MedioDePago medioDePago;
 
 	
     // Método para inicializar datos al entrar al módulo
@@ -82,7 +91,11 @@ public class FacturaVenta extends MovementTransactional{
         this.setTotal(totalItem);
         this.setTotalSinDescuento(totalSinDescuento);
         this.saldo = this.getTotal().subtract(this.getSenia());
-
+        if(this.getReceta() != null) {
+        	this.getReceta().setCliente(this.getCliente());
+        	this.getReceta().setEmpresa(this.getEmpresa());
+        }
+        
     }
 
     
@@ -102,12 +115,12 @@ public class FacturaVenta extends MovementTransactional{
 		this.senia = seña;
 	}
 
-	public MetodoPago getMetodoDePago() {
-		return metodoDePago;
+	public MedioDePago getMedioDePago() {
+		return medioDePago;
 	}
 
-	public void setMetodoDePago(MetodoPago metodoDePago) {
-		this.metodoDePago = metodoDePago;
+	public void setMedioDePago(MedioDePago medioDePago) {
+		this.medioDePago = medioDePago;
 	}
 
 	public Collection<ItemFacturaVenta> getItems() {
@@ -148,6 +161,14 @@ public class FacturaVenta extends MovementTransactional{
 
 	public void setTotalSinDescuento(BigDecimal totalSinDescuento) {
 		this.totalSinDescuento = totalSinDescuento;
+	}
+
+	public Boolean getRetirado() {
+		return retirado;
+	}
+
+	public void setRetirado(Boolean retiroCliente) {
+		this.retirado = retiroCliente;
 	}
 
 }

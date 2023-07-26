@@ -1,19 +1,22 @@
 package org.openxava.negocio.model;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.PostLoad;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 import org.openxava.annotations.ReadOnly;
 import org.openxava.annotations.ReferenceView;
 import org.openxava.annotations.Required;
-import org.openxava.annotations.Stereotype;
 import org.openxava.annotations.View;
 import org.openxava.negocio.base.ObjectPersistent;
 
-@View(members="venta; producto; cantidad, precio, descuento")
+@View(members="venta; producto; cantidad, precio, descuento, subTotal")
 
 @Entity
 public class ItemFacturaVenta extends ObjectPersistent{
@@ -32,6 +35,37 @@ public class ItemFacturaVenta extends ObjectPersistent{
 	
     @Required
 	private BigDecimal precio;
+    
+    @ReadOnly
+    private BigDecimal subTotal;
+    
+    @PostLoad
+    @PreUpdate
+    @PrePersist
+    public void calcularCampoCalculado() {
+        calcularTotales();
+        this.getVenta().calcularCampoCalculado();
+    }
+
+	public void calcularTotales() {
+		BigDecimal totalSinDescuento = this.getCantidad().multiply(this.getPrecio());
+        this.setCantidad(BigDecimal.ONE);
+        
+        if(this.getDescuento().compareTo(BigDecimal.ZERO) == 1){
+        	this.setSubTotal(totalSinDescuento.subtract(totalSinDescuento.multiply(this.getDescuento().divide(BigDecimal.valueOf(100L),4,RoundingMode.HALF_EVEN))));
+        }else {
+        	this.setSubTotal(totalSinDescuento);
+        }
+	}
+    
+
+	public BigDecimal getSubTotal() {
+		return subTotal != null ? subTotal : BigDecimal.ZERO ;
+	}
+
+	public void setSubTotal(BigDecimal subTotal) {
+		this.subTotal = subTotal;
+	}
 
 	public Producto getProducto() {
 		return producto;
@@ -46,7 +80,7 @@ public class ItemFacturaVenta extends ObjectPersistent{
 	}
 
 	public void setCantidad(BigDecimal cantidad) {
-		this.cantidad = cantidad;
+		this.cantidad = (cantidad == null) ? BigDecimal.ONE : cantidad;
 	}
 
 	public BigDecimal getDescuento() {

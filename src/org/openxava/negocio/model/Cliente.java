@@ -7,18 +7,19 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PreUpdate;
 
-import org.openxava.actions.DefaultValueCalculatorDomicilio;
 import org.openxava.annotations.DefaultValueCalculator;
+import org.openxava.annotations.Stereotype;
 import org.openxava.annotations.View;
 import org.openxava.annotations.Views;
 import org.openxava.negocio.base.BasicBusiness;
+import org.openxava.negocio.calculators.DefaultValueCalculatorDomicilio;
 
 @Views({
-	@View(members="codigo, nombre, apellido;"
-			+ "edad, correoElectronico;"
+	@View(members="nombre, apellido, numeroDocumento;"
+			+ "edad, correoElectronico, codigo;"
 			+ "domicilio;"
 			+ "Auditoria[fechaCreacion, fechaModificacion]"),
-	@View(name="simple", members="nombre, apellido, edad;")
+	@View(name="simple", members="nombre, apellido, edad, numeroDocumento;")
 })
 
 
@@ -33,9 +34,20 @@ public class Cliente extends BasicBusiness{
 	@DefaultValueCalculator(DefaultValueCalculatorDomicilio.class)
 	public Domicilio domicilio;
 	
+	@Stereotype("EMAIL")
 	public String correoElectronico;
 	
 	public Integer edad;
+	
+	public String numeroDocumento;
+
+	public String getNumeroDocumento() {
+		return numeroDocumento;
+	}
+
+	public void setNumeroDocumento(String numeroDocumento) {
+		this.numeroDocumento = numeroDocumento;
+	}
 
 	public String getCorreoElectronico() {
 		return correoElectronico;

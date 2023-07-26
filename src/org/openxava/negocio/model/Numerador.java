@@ -1,9 +1,7 @@
 package org.openxava.negocio.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import org.openxava.annotations.SearchKey;
+
 import org.openxava.negocio.base.BasicBusiness;
 
 @Entity

@@ -1,4 +1,4 @@
-package org.openxava.actions;
+package org.openxava.negocio.calculators;
 
 import org.openxava.calculators.*;
 import org.openxava.negocio.model.Empresa;
@@ -9,7 +9,6 @@ public class DefaultValueCalculatorEmpresa implements ICalculator{
  
 	@Override
 	public Object calculate() throws Exception {
-		// TODO Auto-generated method stub
 
         Empresa empresa = Empresa.buscarEmpresaPrincipal();
 

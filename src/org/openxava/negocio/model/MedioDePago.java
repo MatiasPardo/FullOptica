@@ -5,6 +5,6 @@ import javax.persistence.Entity;
 import org.openxava.negocio.base.BasicBusiness;
 
 @Entity
-public class MetodoPago extends BasicBusiness{
+public class MedioDePago extends BasicBusiness{
 
 }
