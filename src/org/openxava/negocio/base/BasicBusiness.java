@@ -4,19 +4,37 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.FlushModeType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Query;
 
 import org.openxava.annotations.DisplaySize;
 import org.openxava.annotations.ReadOnly;
 import org.openxava.annotations.Stereotype;
+import org.openxava.jpa.XPersistence;
 import org.openxava.model.ConfiguradorEntidad;
 import org.openxava.util.Users;
 import org.openxava.view.View;
 
 @MappedSuperclass
 public class BasicBusiness extends ObjectPersistent{
+	
+	public static <T> BasicBusiness buscarObjetoPrincipal(Class<T> clase){
+		String sql = "from " + clase.getSimpleName() + " e where e.principal= :principal";
+		
+		Query query = XPersistence.getManager().createQuery(sql);
+		query.setFlushMode(FlushModeType.COMMIT);
+		query.setParameter("principal", Boolean.TRUE);
+		BasicBusiness basicBusiness = null;
+		try{
+			basicBusiness = (BasicBusiness) query.getSingleResult();
+		}
+		catch(Exception e){
+		}
+		return basicBusiness;
+	}
 
 	@Column(length=50)
 	@ReadOnly
