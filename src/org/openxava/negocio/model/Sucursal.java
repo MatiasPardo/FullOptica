@@ -1,6 +1,7 @@
 package org.openxava.negocio.model;
 
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -21,7 +22,7 @@ import com.openxava.naviox.model.User;
 @Entity
 public class Sucursal extends BasicBusiness {
 	
-	public static Object obtenerSucrusalHabiitada(String userActual) {
+	public static Sucursal obtenerSucrusalHabiitada(String userActual) {
 		Sucursal sucursalPrincipal = (Sucursal) BasicBusiness.buscarObjetoPrincipal(Sucursal.class);
 		if(sucursalPrincipal == null) throw new ValidationException("Se debe definir una sucursal Principal");
 		if(!sucursalPrincipal.usuarioHabilitado(userActual)){
@@ -41,16 +42,37 @@ public class Sucursal extends BasicBusiness {
 		Query query = XPersistence.getManager().createQuery(sql);      
 		query.setFlushMode(FlushModeType.COMMIT);
 		query.setParameter("user", user);
+		List<Sucursal> basicBusiness = new LinkedList<Sucursal>();
+		try{
+			Collection<Object[]> resultList = query.getResultList();
+			for(Object[] array: resultList){
+				basicBusiness.add((Sucursal)array[0]);
+			}
+		}
+		catch(Exception e){
+			throw new ValidationException("Problemas para buscar la sucursal");
+		}
+		return basicBusiness.stream().filter(Sucursal::getPrincipal)
+				.findFirst()
+				.orElse(basicBusiness.stream().findFirst()
+						.orElse(null));
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<Sucursal> buscarSucursalesHabilitada(String user) {     
+		
+		String sql = "from Sucursal e, User u where u member of e.usuarios and u.name = :user";
+
+		Query query = XPersistence.getManager().createQuery(sql);      
+		query.setFlushMode(FlushModeType.COMMIT);
+		query.setParameter("user", user);
 		List<Sucursal> basicBusiness = null;
 		try{
 			basicBusiness = (List<Sucursal>) query.getResultList();
 		}
 		catch(Exception e){
 		}
-		return basicBusiness.stream().filter(Sucursal::getPrincipal)
-				.findFirst()
-				.orElse(basicBusiness.stream().findFirst()
-						.orElse(null));
+		return basicBusiness;
 	}
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)

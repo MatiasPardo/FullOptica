@@ -52,7 +52,7 @@ public abstract class MovementTransactional extends BasicBusiness {
 	}
 
 	public Estado getEstado() {
-		return estado;
+		return estado != null ? estado : Estado.Borrador;
 	}
 
 	public void setEstado(Estado estado) {
@@ -87,5 +87,13 @@ public abstract class MovementTransactional extends BasicBusiness {
 		
 	}
 	
+	abstract public void accionesPreConfirmar();
+
+	public void confirmar() {
+		if(this.getEstado().equals(Estado.Borrador)) {
+			this.setEstado(Estado.Confirmada);
+		}
+		
+	}
 	
 }

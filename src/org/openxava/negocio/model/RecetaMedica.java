@@ -96,6 +96,12 @@ public class RecetaMedica extends MovementTransactional {
 	public void setNumeroLaboratorio(String numeroLaboratorio) {
 		this.numeroLaboratorio = numeroLaboratorio;
 	}
+	
+
+	@Override
+	public void accionesPreConfirmar() {
+		
+	}
 
 	
 }

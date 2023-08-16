@@ -14,7 +14,6 @@ import org.openxava.annotations.Views;
 import org.openxava.negocio.base.BasicBusiness;
 import org.openxava.negocio.calculators.DefaultValueCalculatorDomicilio;
 
-import lombok.Data;
 
 @Views({
 	@View(members="nombre, razonSocial, cuit;"
@@ -24,7 +23,7 @@ import lombok.Data;
 	@View(name="simple", members="nombre, razonSocial, cuit;")
 })
 
-@Data
+
 @Entity
 public class Proveedor extends BasicBusiness{
 	

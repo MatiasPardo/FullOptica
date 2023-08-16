@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 
 import org.hibernate.validator.constraints.Length;
+import org.openxava.annotations.CloudHiddenTabReference;
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
 import org.openxava.annotations.ListProperties;
@@ -21,9 +22,11 @@ import org.openxava.annotations.NoCreate;
 import org.openxava.annotations.NoModify;
 import org.openxava.annotations.ReadOnly;
 import org.openxava.annotations.Stereotype;
+import org.openxava.annotations.Tab;
 import org.openxava.annotations.View;
 import org.openxava.model.Estado;
 import org.openxava.negocio.base.MovementTransactional;
+import org.openxava.negocio.base.SucursalUsuarioFilter;
 import org.openxava.negocio.calculators.DefaultValuCalculatorMedioDePago;
 import org.openxava.negocio.calculators.DefaultValueCalculatorSucusal;
 
@@ -34,10 +37,17 @@ import org.openxava.negocio.calculators.DefaultValueCalculatorSucusal;
 		+ "medioDePago, total;"
 		+ "observaciones")
 @Entity
+@Tab(
+	    filter=SucursalUsuarioFilter.class,
+	    properties="proveedor.razonSocial, fecha, empresa.nombre, numero, estado, total, usuario, medioDePago.nombre, sucursal.nombre",
+	    baseCondition=SucursalUsuarioFilter.BASECONDITION_USUARIO,
+	    defaultOrder="${fechaCreacion} desc"
+	)
 public class FacturaCompra extends MovementTransactional{
 
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
 	@DescriptionsList(descriptionProperties="razonSocial, cuit, nombre")
+	@CloudHiddenTabReference
 	private Proveedor proveedor;
 	
 	@OneToMany(mappedBy="compra", cascade=CascadeType.ALL)
@@ -133,6 +143,12 @@ public class FacturaCompra extends MovementTransactional{
 
 	public void setObservaciones(String observaciones) {
 		this.observaciones = observaciones;
+	}
+
+	@Override
+	public void accionesPreConfirmar() {
+		this.calcularCampoCalculado();
+		
 	}
 
 }
