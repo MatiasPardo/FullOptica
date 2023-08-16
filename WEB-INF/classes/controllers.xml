@@ -59,8 +59,16 @@
 		</action>
 	</controller>
 	
-		
-    <!-- Environment variable:
+	 <controller name="MovimientoTransaccional">
+	  	<action name="confirmar" 
+	  			mode="detail"
+				class="org.openxava.negocio.base.ConfirmarMovimientoTransaccionalAccion">
+		</action>
+	</controller>
+	
+	
+    <!--  
+    Environment variable:
     <env-var name="FullOptica_DEFAULT_YEAR" value="2015"/> 
     -->
     
