@@ -16,7 +16,7 @@ import org.openxava.annotations.Required;
 import org.openxava.annotations.View;
 import org.openxava.negocio.base.ObjectPersistent;
 
-@View(members="compra; producto; cantidad, precio, descuento, subTotal")
+@View(members="compra; producto; cantidad, detalle, precio; descuento, subTotal")
 
 @Entity
 public class ItemFacturaCompra extends ObjectPersistent{
@@ -38,6 +38,8 @@ public class ItemFacturaCompra extends ObjectPersistent{
     
     @ReadOnly
     private BigDecimal subTotal;
+    
+    private String detalle;
     
     @PostLoad
     @PreUpdate
@@ -105,6 +107,14 @@ public class ItemFacturaCompra extends ObjectPersistent{
 
 	public void setPrecio(BigDecimal precio) {
 		this.precio = precio;
+	}
+
+	public String getDetalle() {
+		return detalle;
+	}
+
+	public void setDetalle(String detalle) {
+		this.detalle = detalle;
 	}
 	
 }

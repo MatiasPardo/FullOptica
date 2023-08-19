@@ -2,6 +2,7 @@ package org.openxava.negocio.base.actions;
 
 import org.openxava.actions.IChainAction;
 import org.openxava.actions.ViewBaseAction;
+import org.openxava.model.Estado;
 import org.openxava.model.MapFacade;
 import org.openxava.negocio.base.MovementTransactional;
 import org.openxava.validators.ValidationException;
@@ -22,8 +23,10 @@ public class AnularMovimientoTransaccionalAccion extends ViewBaseAction implemen
 
 			if (this.getErrors().isEmpty()){
 				tr.anular();
+				Estado trEstado = tr.getEstado();
 				this.commit();
-				this.addMessage("Se anulo la transaccion con exito");
+				if(trEstado.equals(Estado.Anulada)) this.addMessage("Se anulo la transaccion con exito T_T");
+				else this.addError("No se pudo Anular, revise los datos");
 			}
 		}catch(Exception e){
 			this.rollback();

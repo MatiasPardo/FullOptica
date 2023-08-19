@@ -226,7 +226,6 @@ public class FacturaVenta extends MovementTransactional{
 		
 	}
 
-
 	@Override
 	public void accionesPreAnular() {
 		// TODO Auto-generated method stub

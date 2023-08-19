@@ -2,6 +2,7 @@ package org.openxava.negocio.base.actions;
 
 import org.openxava.actions.IChainAction;
 import org.openxava.actions.SaveAction;
+import org.openxava.model.Estado;
 import org.openxava.model.MapFacade;
 import org.openxava.negocio.base.MovementTransactional;
 import org.openxava.validators.ValidationException;
@@ -22,8 +23,10 @@ public class ConfirmarMovimientoTransaccionalAccion extends SaveAction implement
 
 			if (this.getErrors().isEmpty()){
 				tr.confirmar();
+				Estado trEstado = tr.getEstado();
 				this.commit();
-				this.addMessage("Se confirmo la transaccion con exito, gracias por sumar otra venta xD");
+				if(trEstado.equals(Estado.Confirmada)) this.addMessage("Se confirmo la transaccion con exito, gracias por sumar otra venta xD");
+				else this.addError("No se pudo confirmar, revise los datos");
 			}
 		}catch(Exception e){
 			this.rollback();
