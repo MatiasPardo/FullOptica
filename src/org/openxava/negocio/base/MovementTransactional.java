@@ -113,8 +113,9 @@ public abstract class MovementTransactional extends BasicBusiness {
 		}
 	} 
 	
+	@Override
 	public boolean readOnly() {
-		if(this.getEstado().equals(Estado.Confirmada)){
+		if(this.getEstado().equals(Estado.Confirmada) || this.getEstado().equals(Estado.Anulada)){
 			return true;
 		}else return false;
 	}

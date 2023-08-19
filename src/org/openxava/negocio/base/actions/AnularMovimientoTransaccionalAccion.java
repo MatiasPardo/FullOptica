@@ -1,11 +1,12 @@
 package org.openxava.negocio.base.actions;
 
+import org.openxava.actions.IChainAction;
 import org.openxava.actions.ViewBaseAction;
 import org.openxava.model.MapFacade;
 import org.openxava.negocio.base.MovementTransactional;
 import org.openxava.validators.ValidationException;
 
-public class AnularMovimientoTransaccionalAccion extends ViewBaseAction {
+public class AnularMovimientoTransaccionalAccion extends ViewBaseAction implements IChainAction{
 
 	@Override
 	public void execute() throws Exception {
@@ -22,6 +23,7 @@ public class AnularMovimientoTransaccionalAccion extends ViewBaseAction {
 			if (this.getErrors().isEmpty()){
 				tr.anular();
 				this.commit();
+				this.addMessage("Se anulo la transaccion con exito");
 			}
 		}catch(Exception e){
 			this.rollback();
@@ -36,5 +38,17 @@ public class AnularMovimientoTransaccionalAccion extends ViewBaseAction {
 		}
 				
 	}
+
+	@Override
+	public String getNextAction() throws Exception {
+		if (this.getErrors().isEmpty()){
+			return "BasicBusiness.edit";
+		}
+		else{
+			return null;
+		}		
+	}
+	
+	
 	
 }

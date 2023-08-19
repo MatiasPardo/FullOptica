@@ -155,10 +155,6 @@ public class FacturaCompra extends MovementTransactional{
 		
 	}
 	
-	@Override
-	public boolean readOnly() {
-		return super.readOnly();
-	}
 
 	@Override
 	public void accionesPreAnular() {

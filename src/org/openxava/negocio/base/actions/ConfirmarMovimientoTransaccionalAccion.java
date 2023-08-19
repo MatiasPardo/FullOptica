@@ -23,6 +23,7 @@ public class ConfirmarMovimientoTransaccionalAccion extends SaveAction implement
 			if (this.getErrors().isEmpty()){
 				tr.confirmar();
 				this.commit();
+				this.addMessage("Se confirmo la transaccion con exito, gracias por sumar otra venta xD");
 			}
 		}catch(Exception e){
 			this.rollback();
