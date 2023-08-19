@@ -26,9 +26,10 @@ import org.openxava.annotations.Tab;
 import org.openxava.annotations.View;
 import org.openxava.model.Estado;
 import org.openxava.negocio.base.MovementTransactional;
-import org.openxava.negocio.base.SucursalUsuarioFilter;
+import org.openxava.negocio.base.actions.SucursalUsuarioFilter;
 import org.openxava.negocio.calculators.DefaultValuCalculatorMedioDePago;
 import org.openxava.negocio.calculators.DefaultValueCalculatorSucusal;
+import org.openxava.validators.ValidationException;
 
 @View(members="fecha, empresa, sucursal, retirado;"
 		+ "estado, numero;"
@@ -215,17 +216,25 @@ public class FacturaVenta extends MovementTransactional{
 
 	@Override
 	public void accionesPreConfirmar() {
+		if(this.getItems().isEmpty()){
+			throw new ValidationException("Se debe asignar productos a la venta");
+		}
 		this.setSenia(BigDecimal.ZERO);
 		this.setRetirado(Boolean.TRUE);
     	this.getReceta().setEstado(Estado.Abierta);
 		this.calcularCampoCalculado();
+		
 	}
 
 	@Override
 	public boolean readOnly() {
-		if(this.getEstado().equals(Estado.Confirmada)){
-			return true;
-		}else return false;
+		return super.readOnly();
+	}
+
+	@Override
+	public void accionesPreAnular() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

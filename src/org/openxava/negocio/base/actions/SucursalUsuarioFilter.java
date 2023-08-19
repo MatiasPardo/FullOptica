@@ -1,4 +1,4 @@
-package org.openxava.negocio.base;
+package org.openxava.negocio.base.actions;
 
 
 import java.util.ArrayList;

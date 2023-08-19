@@ -20,7 +20,7 @@ import org.openxava.negocio.base.MovementTransactional;
 			+ "tipoDeLente, distanciaInterPupilar;"
 			+ "graduacion;"),
 	@View(name="FacturaVenta",  members=""
-			+ "numeroDeSobre, numeroLaboratorio;"
+			+ "cliente; numeroDeSobre, numeroLaboratorio;"
 			+ "tipoDeLente, distanciaInterPupilar;"
 			+ "graduacion;")
 })
@@ -100,6 +100,11 @@ public class RecetaMedica extends MovementTransactional {
 
 	@Override
 	public void accionesPreConfirmar() {
+		
+	}
+	@Override
+	public void accionesPreAnular() {
+		// TODO Auto-generated method stub
 		
 	}
 

@@ -25,7 +25,7 @@
 	</controller>
 	
     <controller name="BasicBusiness">
-	  <extends controller="TipicoSinImportacion"/>
+     <extends controller="TipicoSinImportacion"/>
 	  	<action name="save" mode="detail"
 		    	by-default="if-possible" 
 				class="org.openxava.actions.SaveBasicBusinessAction"
@@ -62,7 +62,11 @@
 	 <controller name="MovimientoTransaccional">
 	  	<action name="confirmar" 
 	  			mode="detail"
-				class="org.openxava.negocio.base.ConfirmarMovimientoTransaccionalAccion">
+				class="org.openxava.negocio.base.actions.ConfirmarMovimientoTransaccionalAccion">
+		</action>
+		<action name="anular" 
+	  			mode="detail"
+				class="org.openxava.negocio.base.actions.AnularMovimientoTransaccionalAccion">
 		</action>
 	</controller>
 	

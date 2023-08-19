@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.FlushModeType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
+import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.persistence.Query;
 
@@ -16,6 +17,7 @@ import org.openxava.annotations.Stereotype;
 import org.openxava.jpa.XPersistence;
 import org.openxava.model.ConfiguradorEntidad;
 import org.openxava.util.Users;
+import org.openxava.validators.ValidationException;
 import org.openxava.view.View;
 
 @MappedSuperclass
@@ -114,5 +116,11 @@ public class BasicBusiness extends ObjectPersistent{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@PreRemove
+	public void preEliminar() {
+		throw new ValidationException("No se puede eliminar, en cambio se debe marcar como inactivo");
+	}
+	
 	
 }

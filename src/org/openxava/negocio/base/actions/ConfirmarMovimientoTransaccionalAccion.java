@@ -1,8 +1,10 @@
-package org.openxava.negocio.base;
+package org.openxava.negocio.base.actions;
 
 import org.openxava.actions.IChainAction;
 import org.openxava.actions.SaveAction;
 import org.openxava.model.MapFacade;
+import org.openxava.negocio.base.MovementTransactional;
+import org.openxava.validators.ValidationException;
 
 public class ConfirmarMovimientoTransaccionalAccion extends SaveAction implements IChainAction{
 
@@ -10,6 +12,9 @@ public class ConfirmarMovimientoTransaccionalAccion extends SaveAction implement
 	public void execute() throws Exception {
 		try {
 			MovementTransactional tr = (MovementTransactional)MapFacade.findEntity(getView().getModelName(), getView().getKeyValues());
+			
+			if(tr == null) throw new ValidationException("Primero debe grabar");
+			
 			tr.accionesPreConfirmar();
 			this.commit();
 			

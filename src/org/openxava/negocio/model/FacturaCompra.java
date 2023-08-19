@@ -26,9 +26,10 @@ import org.openxava.annotations.Tab;
 import org.openxava.annotations.View;
 import org.openxava.model.Estado;
 import org.openxava.negocio.base.MovementTransactional;
-import org.openxava.negocio.base.SucursalUsuarioFilter;
+import org.openxava.negocio.base.actions.SucursalUsuarioFilter;
 import org.openxava.negocio.calculators.DefaultValuCalculatorMedioDePago;
 import org.openxava.negocio.calculators.DefaultValueCalculatorSucusal;
+import org.openxava.validators.ValidationException;
 
 @View(members="fecha, estado, numero;"
 		+ "empresa, sucursal;"
@@ -147,7 +148,21 @@ public class FacturaCompra extends MovementTransactional{
 
 	@Override
 	public void accionesPreConfirmar() {
+		if(this.getItems().isEmpty()){
+			throw new ValidationException("Se debe asignar productos a la compra");
+		}
 		this.calcularCampoCalculado();
+		
+	}
+	
+	@Override
+	public boolean readOnly() {
+		return super.readOnly();
+	}
+
+	@Override
+	public void accionesPreAnular() {
+		// TODO Auto-generated method stub
 		
 	}
 

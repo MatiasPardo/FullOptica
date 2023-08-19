@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PreRemove;
 
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
@@ -14,6 +15,7 @@ import org.openxava.negocio.calculators.DefaultValueCalculatorDateNow;
 import org.openxava.negocio.calculators.DefaultValueCalculatorEmpresa;
 import org.openxava.negocio.calculators.DefaultValueCalculatorState;
 import org.openxava.negocio.model.Empresa;
+import org.openxava.validators.ValidationException;
 
 @MappedSuperclass
 public abstract class MovementTransactional extends BasicBusiness {
@@ -94,6 +96,27 @@ public abstract class MovementTransactional extends BasicBusiness {
 			this.setEstado(Estado.Confirmada);
 		}
 		
+	}
+	
+	@PreRemove
+	public void preEliminar() {
+		throw new ValidationException("No se puede eliminar, en cambio se debe anular");
+	}
+
+	abstract public void accionesPreAnular();
+
+	public void anular() {
+		if(this.getEstado().equals(Estado.Confirmada)) {
+			this.setEstado(Estado.Anulada);
+		}else if(this.getEstado().equals(Estado.Abierta)) {
+			this.setEstado(Estado.Cancelada);
+		}
+	} 
+	
+	public boolean readOnly() {
+		if(this.getEstado().equals(Estado.Confirmada)){
+			return true;
+		}else return false;
 	}
 	
 }

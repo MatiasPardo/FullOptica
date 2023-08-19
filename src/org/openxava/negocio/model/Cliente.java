@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 
 import org.openxava.annotations.DefaultValueCalculator;
@@ -13,12 +14,13 @@ import org.openxava.annotations.View;
 import org.openxava.annotations.Views;
 import org.openxava.negocio.base.BasicBusiness;
 import org.openxava.negocio.calculators.DefaultValueCalculatorDomicilio;
+import org.openxava.validators.ValidationException;
 
 @Views({
 	@View(members="nombre, apellido, numeroDocumento;"
 			+ "edad, correoElectronico, codigo;"
 			+ "domicilio;"
-			+ "Auditoria[fechaCreacion, fechaModificacion]"),
+			+ "Auditoria[fechaCreacion, fechaModificacion; inactivo]"),
 	@View(name="simple", members="nombre, apellido, edad, numeroDocumento;")
 })
 
@@ -40,6 +42,8 @@ public class Cliente extends BasicBusiness{
 	public Integer edad;
 	
 	public String numeroDocumento;
+	
+	private Boolean inactivo;
 
 	public String getNumeroDocumento() {
 		return numeroDocumento;
@@ -93,7 +97,19 @@ public class Cliente extends BasicBusiness{
 	public void onUpdate(){
 		this.setFechaModificacion(new Date());
 	}
+
+	public Boolean getInactivo() {
+		return inactivo;
+	}
+
+	public void setInactivo(Boolean inactivo) {
+		this.inactivo = inactivo;
+	}
 	
+	@PreRemove
+	public void preEliminar() {
+		throw new ValidationException("No se puede eliminar, en cambio se debe marcar como inactivo");
+	}
 
 	
 }
