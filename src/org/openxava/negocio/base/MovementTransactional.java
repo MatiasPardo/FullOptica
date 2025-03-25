@@ -118,4 +118,8 @@ public abstract class MovementTransactional extends BasicBusiness {
 		return this.getEstado().isSoloLectura();
 	}
 	
+	@Override
+	public void recalculateData() {
+		
+	}
 }

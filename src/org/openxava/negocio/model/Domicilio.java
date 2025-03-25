@@ -30,7 +30,6 @@ public class Domicilio extends BasicBusiness{
 	
 	@SuppressWarnings("unchecked")
 	public static Domicilio buscarDomicilioPrincipal() {
-		// TODO Auto-generated method stub
 		String sql = "from Domicilio e where " +
 				"e.principal= :principal";
 		

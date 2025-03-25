@@ -7,6 +7,19 @@
 	<classpathentry kind="src" path="persistence"/>
 	<classpathentry kind="src" path="xava"/>
 	<classpathentry kind="src" path="i18n"/>
-	<classpathentry kind="lib" path="/OpenXava/lib/hsqldb.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/addons.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/baseApiRest.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/openxava.jar" sourcepath="/OpenXava"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/slf4j-jdk14.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/javacsv.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/javax.inject.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/hibernate-core.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/hibernate-envers.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/hibernate-validator-annotation-processor.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/hibernate-validator-cdi.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/hibernate-validator.jar"/>
+	<classpathentry kind="lib" path="/CloudFactory/web/WEB-INF/lib/jpa.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>

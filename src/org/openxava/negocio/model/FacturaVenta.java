@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 
 import org.hibernate.validator.constraints.Length;
+import org.openxava.annotations.AddAction;
 import org.openxava.annotations.CloudHiddenTabReference;
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
@@ -21,6 +22,9 @@ import org.openxava.annotations.ListProperties;
 import org.openxava.annotations.NoCreate;
 import org.openxava.annotations.NoModify;
 import org.openxava.annotations.ReadOnly;
+import org.openxava.annotations.RemoveAction;
+import org.openxava.annotations.RemoveSelectedAction;
+import org.openxava.annotations.SaveAction;
 import org.openxava.annotations.Stereotype;
 import org.openxava.annotations.Tab;
 import org.openxava.annotations.View;
@@ -59,8 +63,12 @@ public class FacturaVenta extends MovementTransactional{
 	@DescriptionsList(descriptionProperties="numeroDeSobre, tipoDeLente.nombre")
 	private RecetaMedica receta;
 	
-	@OneToMany(mappedBy="venta", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="venta", cascade=CascadeType.REMOVE, orphanRemoval=true)
 	@ListProperties("producto.codigo, producto.nombre, cantidad, descuento, precio, subTotal")	
+	@RemoveAction(value="ItemTransaccion.remove")
+	@RemoveSelectedAction(value="ItemTransaccion.removeSelected")
+	@AddAction("BasicBusiness.add")
+	@SaveAction("ItemTransaccion.save")
 	private Collection<ItemFacturaVenta> items;
 	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
@@ -91,9 +99,20 @@ public class FacturaVenta extends MovementTransactional{
 	@NoCreate @NoModify
 	@DefaultValueCalculator(DefaultValuCalculatorMedioDePago.class)
 	private MedioDePago medioDePago;
+	
+	@ReadOnly
+	private BigDecimal seniaInicial;
 
 	
-    // Método para inicializar datos al entrar al módulo
+    public BigDecimal getSeniaInicial() {
+		return seniaInicial;
+	}
+
+	public void setSeniaInicial(BigDecimal seniaInicial) {
+		this.seniaInicial = seniaInicial;
+	}
+
+	// Método para inicializar datos al entrar al módulo
     @PostConstruct
     public void init() {
         this.setFecha(new Date());
@@ -108,6 +127,7 @@ public class FacturaVenta extends MovementTransactional{
         
         if(this.getItems() != null && !this.getItems().isEmpty()){
             for(ItemFacturaVenta item :this.getItems()){
+            	item.calcularTotales();
             	BigDecimal subTotalItem = item.getCantidad().multiply(item.getPrecio());
             	totalSinDescuento = totalSinDescuento.add(subTotalItem);
     			totalItem = totalItem.add(subTotalItem);
@@ -146,8 +166,8 @@ public class FacturaVenta extends MovementTransactional{
 		return senia == null ? BigDecimal.ZERO : senia;
 	}
 
-	public void setSenia(BigDecimal seña) {
-		this.senia = seña;
+	public void setSenia(BigDecimal sena) {
+		this.senia = sena;
 	}
 
 	public MedioDePago getMedioDePago() {
@@ -231,5 +251,11 @@ public class FacturaVenta extends MovementTransactional{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void recalculateData() {
+		this.calcularCampoCalculado();
+	}
+	
 
 }

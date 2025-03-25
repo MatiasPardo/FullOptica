@@ -52,11 +52,20 @@
 				hidden="true"
 				class="org.openxava.base.actions.EditarOnChangeObjetoNegocioAction">
 		</action>
-		<action name="deleteSelected"
+		<action name="delete"
 		    	mode="list" 
 				class="org.openxava.actions.DeleteSelectedAction"
 				hidden="true">
 		</action>
+		<action name="deleteSelected" confirm="true"
+			icon="delete" 
+			image="delete.gif" in-each-row="true"
+			class="org.openxava.actions.RemoveInCollectionAction"/>
+		<action name="add"
+			icon="add" 
+			image="new.gif" in-each-row="true"
+			class="org.openxava.actions.AddElementAction"/>			
+			
 	</controller>
 	
 	 <controller name="MovimientoTransaccional">
@@ -89,5 +98,28 @@
     	</action>
 	</controller>    
     -->
+    <controller name="ItemTransaccion">        
+        
+		<action name="remove" confirm="true"
+			class="org.openxava.actions.BorrarItemTransaccionAction"/>
+		
+		<action name="removeSelected" confirm="true"
+				icon="delete" 
+				image="delete.gif" in-each-row="true"
+				class="org.openxava.actions.BorrarItemTransaccionSeleccionadoAction"/>
+		
+		<action name="save"
+			class="org.openxava.actions.AddElementAction"/>	
+<!--		
+		<accion nombre="edit" imagen="edit.gif"
+			icono="pencil"
+			clase="org.openxava.base.actions.EditarItemTransaccionAction"/>
+		
+		<accion nombre="view" imagen="view.gif"
+			icono="eye"
+			clase="org.openxava.base.actions.VerItemTransaccionAction"/>
+		
+	-->			
+	</controller>
     
 </controladores>

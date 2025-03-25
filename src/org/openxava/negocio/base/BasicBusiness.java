@@ -123,4 +123,8 @@ public class BasicBusiness extends ObjectPersistent{
 	}
 	
 	
+	public void recalculateData(){
+		// TODO Auto-generated method stub
+	}
+	
 }

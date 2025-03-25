@@ -6,6 +6,8 @@ import org.openxava.application.meta.*;
 import org.openxava.model.*;
 import org.openxava.model.meta.*;
 import org.openxava.negocio.base.BasicBusiness;
+import org.openxava.negocio.base.MovementTransactional;
+import org.openxava.negocio.model.FacturaVenta;
 import org.openxava.util.*;
 
 import com.openxava.naviox.model.*;
@@ -71,6 +73,7 @@ public class EditBasicBusinessAction extends SearchByViewKeyAction{//extends Sea
 	        	for(String propiedad: propiedadesSoloLectura){
 	        		getView().setEditable(propiedad, false);
 	        	}
+	        	bo.recalculateData();
 	        }
 	        
 	        List<String> propiedadesVisibles = new LinkedList<String>();
@@ -86,7 +89,7 @@ public class EditBasicBusinessAction extends SearchByViewKeyAction{//extends Sea
         
         // Atributos ocultos
         this.ocultarAtributos();
-        
+
         if (!Is.emptyString(this.getAtributoFoco())){
         	if (this.getView().isEditable()){
         		this.getView().setFocus(this.getAtributoFoco());        		

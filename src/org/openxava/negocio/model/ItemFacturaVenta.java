@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PostLoad;
+import javax.persistence.PostRemove;
+import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
@@ -42,9 +44,17 @@ public class ItemFacturaVenta extends ObjectPersistent{
     @PostLoad
     @PreUpdate
     @PrePersist
+    @PostUpdate
     public void calcularCampoCalculado() {
         calcularTotales();
         this.getVenta().calcularCampoCalculado();
+    }
+    
+    @PostRemove
+    public void alEliminar() {
+        if (this.getVenta() != null) {
+            this.getVenta().calcularCampoCalculado();
+        }
     }
 
 	public void calcularTotales() {

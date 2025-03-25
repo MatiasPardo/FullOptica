@@ -59,7 +59,7 @@
 	<target name="updateSchema">
 		<ant antfile="${openxava.base.dir}/OpenXava/build.xml" target="updateSchemaJPA">			
 			<property name="persistence.unit" value="junit"/>
-			<property name="schema.path" value="../../tomcat/lib/postgresql-9.2-1004.jdbc41.jar"/>
+			<property name="schema.path" value="C:\server\apache-tomcat-7.0.100/lib/postgresql-42.2.5.jar"/>
 		</ant>
 	</target>	
 	

@@ -22,12 +22,20 @@
     </persistence-unit> -->   
 
 	<persistence-unit name="default">
-        <non-jta-data-source>java:comp/env/jdbc/FullOpticaDS</non-jta-data-source>
-        <class>org.openxava.session.GalleryImage</class>
-        <properties>
-             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL94Dialect"/>
-        </properties>
-    </persistence-unit>    
+	    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+	    <properties>
+	        <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+	        <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL94Dialect"/>
+	        <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/fulloptica"/>
+	        <property name="hibernate.connection.username" value="postgres"/>
+	        <property name="hibernate.connection.password" value="posgres"/>
+	        <property name="hibernate.show_sql" value="true"/> 
+	        <property name="hibernate.format_sql" value="true"/>
+	        <property name="hibernate.use_sql_comments" value="true"/>
+	    </properties>
+	</persistence-unit>
+
+
 	
     
     <!-- JUnit Hypersonic 
@@ -47,9 +55,9 @@
          <properties>
           <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
           <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL94Dialect"/>
-          <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:9090/fulloptica"/>
+          <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/fulloptica"/>
           <property name="hibernate.connection.username" value="postgres"/>
-          <property name="hibernate.connection.password" value="postgres"/>
+          <property name="hibernate.connection.password" value="posgres"/>
       <!--    <property name="hibernate.default_schema" value="fulloptica"/> -->
           <property name="hibernate.show_sql" value="true" /> 
 		  <property name="hibernate.format_sql" value="true"/>
