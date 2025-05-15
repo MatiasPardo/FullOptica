@@ -12,7 +12,12 @@ public class Numerador extends BasicBusiness{
 	private Integer cantidadDigitos;
 	
 	private Long proximoNumero;
-
+	
+/*	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@DescriptionsList(descriptionProperties="nombre")
+	@NoCreate @NoModify
+	private Empresa empresa;
+*/
 	public String getPrefijo() {
 		return prefijo;
 	}

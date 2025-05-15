@@ -7,7 +7,6 @@ import org.openxava.model.*;
 import org.openxava.model.meta.*;
 import org.openxava.negocio.base.BasicBusiness;
 import org.openxava.negocio.base.MovementTransactional;
-import org.openxava.negocio.model.FacturaVenta;
 import org.openxava.util.*;
 
 import com.openxava.naviox.model.*;
@@ -44,6 +43,7 @@ public class EditBasicBusinessAction extends SearchByViewKeyAction{//extends Sea
 	public void execute() throws Exception {
 		BasicBusiness bo = this.getBasicBusiness();
 		if (bo != null){
+			actionView(bo);
 			// primero se asigna el nombre de la view
 			String newViewName = bo.viewName(this.getView()); 
 			if (!Is.equal(newViewName, getView().getViewName())){
@@ -97,6 +97,23 @@ public class EditBasicBusinessAction extends SearchByViewKeyAction{//extends Sea
         }        
 	}
 	
+	private void actionView(BasicBusiness bo) {
+        if(bo instanceof MovementTransactional){
+        	Estado estado = ((MovementTransactional) bo).getEstado();
+			if(estado != null && estado.equals(Estado.Confirmada)){
+
+				removeActions("BasicBusiness.save");
+				removeActions("MovimientoTransaccional.confirmar");
+			}
+			if(estado != null && estado.equals(Estado.Anulada)) {
+				removeActions("MovimientoTransaccional.confirmar");
+			}
+			if(estado != null && estado.equals(Estado.Borrador)) {
+				removeActions("MovimientoTransaccional.anular");
+			}
+		}		
+	}
+
 	protected void ocultarAtributos(){
 		try{
 			User user = User.find(Users.getCurrent());

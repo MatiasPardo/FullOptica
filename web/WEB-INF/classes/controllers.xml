@@ -60,11 +60,7 @@
 		<action name="deleteSelected" confirm="true"
 			icon="delete" 
 			image="delete.gif" in-each-row="true"
-			class="org.openxava.actions.RemoveInCollectionAction"/>
-		<action name="add"
-			icon="add" 
-			image="new.gif" in-each-row="true"
-			class="org.openxava.actions.AddElementAction"/>			
+			class="org.openxava.actions.RemoveInCollectionAction"/>		
 			
 	</controller>
 	

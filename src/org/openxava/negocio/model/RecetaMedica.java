@@ -6,6 +6,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 
 import org.openxava.annotations.DescriptionsList;
+import org.openxava.annotations.DisplaySize;
 import org.openxava.annotations.NoCreate;
 import org.openxava.annotations.NoModify;
 import org.openxava.annotations.ReferenceView;
@@ -16,11 +17,11 @@ import org.openxava.negocio.base.MovementTransactional;
 
 @Views({
 	@View(members="empresa;"
-			+ "numeroDeSobre, numeroLaboratorio;"
+			+ "numeroDeSobre, numeroLaboratorio, laboratorio;"
 			+ "tipoDeLente, distanciaInterPupilar;"
 			+ "graduacion;"),
 	@View(name="FacturaVenta",  members=""
-			+ "cliente; numeroDeSobre, numeroLaboratorio;"
+			+ "cliente; numeroDeSobre, numeroLaboratorio, laboratorio;"
 			+ "tipoDeLente, distanciaInterPupilar;"
 			+ "graduacion;")
 })
@@ -36,6 +37,7 @@ public class RecetaMedica extends MovementTransactional {
 	private Graduacion graduacion;
 	
 	@Required
+	@DisplaySize(8)
 	private String numeroDeSobre;
 	
 	@ManyToOne(optional=false, fetch=FetchType.LAZY)
@@ -45,7 +47,13 @@ public class RecetaMedica extends MovementTransactional {
 	
 	private String distanciaInterPupilar;
 	
+	@DisplaySize(8)
 	private String numeroLaboratorio;
+	
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@DescriptionsList(descriptionProperties="nombre")
+	@NoCreate @NoModify
+	private Laboratorio laboratorio;
 
 	public String viewName(org.openxava.view.View view) {
 		view.getAllValues();
@@ -106,6 +114,12 @@ public class RecetaMedica extends MovementTransactional {
 	public void accionesPreAnular() {
 		// TODO Auto-generated method stub
 		
+	}
+	public Laboratorio getLaboratorio() {
+		return laboratorio;
+	}
+	public void setLaboratorio(Laboratorio laboratorio) {
+		this.laboratorio = laboratorio;
 	}
 
 	

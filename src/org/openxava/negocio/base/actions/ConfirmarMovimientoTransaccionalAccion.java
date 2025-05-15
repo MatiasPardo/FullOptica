@@ -15,6 +15,9 @@ public class ConfirmarMovimientoTransaccionalAccion extends SaveAction implement
 			MovementTransactional tr = (MovementTransactional)MapFacade.findEntity(getView().getModelName(), getView().getKeyValues());
 			
 			if(tr == null) throw new ValidationException("Primero debe grabar");
+			if(tr.getEstado().equals(Estado.Confirmada) || tr.getEstado().equals(Estado.Anulada)){
+				throw new ValidationException("La Factura no tiene un estado valido para confirmar");
+			}
 			
 			tr.accionesPreConfirmar();
 			this.commit();

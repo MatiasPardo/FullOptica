@@ -9,11 +9,13 @@ import javax.persistence.PreRemove;
 
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
+import org.openxava.annotations.OnChange;
 import org.openxava.annotations.ReadOnly;
 import org.openxava.model.Estado;
 import org.openxava.negocio.calculators.DefaultValueCalculatorDateNow;
 import org.openxava.negocio.calculators.DefaultValueCalculatorEmpresa;
 import org.openxava.negocio.calculators.DefaultValueCalculatorState;
+import org.openxava.negocio.calculators.StateViewActionChange;
 import org.openxava.negocio.model.Empresa;
 import org.openxava.validators.ValidationException;
 
@@ -27,6 +29,7 @@ public abstract class MovementTransactional extends BasicBusiness {
 	private Empresa empresa;
 	
     @DefaultValueCalculator(DefaultValueCalculatorState.class)
+    @OnChange(StateViewActionChange.class)
     @ReadOnly
 	public Estado estado;
 	

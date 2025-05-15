@@ -31,7 +31,7 @@ public class ItemFacturaVenta extends ObjectPersistent{
 	@ReferenceView("simple")
 	private Producto producto;
 	
-	private BigDecimal cantidad = BigDecimal.ONE;
+	private BigDecimal cantidad;
 
 	private BigDecimal descuento;
 	
@@ -40,6 +40,9 @@ public class ItemFacturaVenta extends ObjectPersistent{
     
     @ReadOnly
     private BigDecimal subTotal;
+    
+    @ReadOnly
+    private BigDecimal impuesto;
     
     @PostLoad
     @PreUpdate
@@ -59,15 +62,25 @@ public class ItemFacturaVenta extends ObjectPersistent{
 
 	public void calcularTotales() {
 		BigDecimal totalSinDescuento = this.getCantidad().multiply(this.getPrecio());
-        this.setCantidad(BigDecimal.ONE);
         
         if(this.getDescuento().compareTo(BigDecimal.ZERO) == 1){
         	this.setSubTotal(totalSinDescuento.subtract(totalSinDescuento.multiply(this.getDescuento().divide(BigDecimal.valueOf(100L),4,RoundingMode.HALF_EVEN))));
         }else {
         	this.setSubTotal(totalSinDescuento);
         }
+        
+        
+        
 	}
     
+
+	public BigDecimal getImpuesto() {
+		return impuesto;
+	}
+
+	public void setImpuesto(BigDecimal impuesto) {
+		this.impuesto = impuesto;
+	}
 
 	public BigDecimal getSubTotal() {
 		return subTotal != null ? subTotal : BigDecimal.ZERO ;
@@ -89,8 +102,8 @@ public class ItemFacturaVenta extends ObjectPersistent{
 		return cantidad == null? BigDecimal.ONE: cantidad;
 	}
 
-	public void setCantidad(BigDecimal cantidad) {
-		this.cantidad = (cantidad == null) ? BigDecimal.ONE : cantidad;
+	public void setCantidad(BigDecimal cantidad) { 
+		this.cantidad = cantidad;
 	}
 
 	public BigDecimal getDescuento() {

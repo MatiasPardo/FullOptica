@@ -23,6 +23,6 @@ public class AddElementAction extends SaveElementInCollectionAction implements I
 	
 	@Override
 	public String getNextAction() throws Exception {
-			return "BasicBusiness.edit";
+			return null;//"BasicBusiness.edit";
 	}
 }

@@ -59,20 +59,15 @@ public class Sucursal extends BasicBusiness {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<Sucursal> buscarSucursalesHabilitada(String user) {     
-		
-		String sql = "from Sucursal e, User u where u member of e.usuarios and u.name = :user";
+	public static List<Sucursal> buscarSucursalesHabilitada(String user) {
+	    String sql = "select e from Sucursal e join e.usuarios u where u.name = :user";
 
-		Query query = XPersistence.getManager().createQuery(sql);      
-		query.setFlushMode(FlushModeType.COMMIT);
-		query.setParameter("user", user);
-		List<Sucursal> basicBusiness = null;
-		try{
-			basicBusiness = (List<Sucursal>) query.getResultList();
-		}
-		catch(Exception e){
-		}
-		return basicBusiness;
+	    Query query = XPersistence.getManager()
+	        .createQuery(sql, Sucursal.class);
+	    query.setFlushMode(FlushModeType.COMMIT);
+	    query.setParameter("user", user);
+
+	    return query.getResultList();
 	}
 
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)

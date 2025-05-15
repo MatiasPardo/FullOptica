@@ -42,13 +42,13 @@ import org.openxava.validators.ValidationException;
 		+ "items;"
 		+ "Totales["
 		+ "totalSinDescuento, total;"
-		+ "senia, saldo];"
+		+ "senia, saldo, seniaInicial];"
 		+ "observaciones")
 
 @Tab(
 	    filter=SucursalUsuarioFilter.class,
 	    properties="cliente.nombre, fecha, empresa.nombre, numero, estado, total, senia, saldo, totalSinDescuento, usuario, medioDePago.nombre, sucursal.nombre",
-	    baseCondition=SucursalUsuarioFilter.BASECONDITION_USUARIO,
+	    baseCondition=SucursalUsuarioFilter.BASECONDITION_FACTURASUCURSAL,
 	    defaultOrder="${fechaCreacion} desc"
 	)
 @Entity
@@ -239,11 +239,12 @@ public class FacturaVenta extends MovementTransactional{
 		if(this.getItems().isEmpty()){
 			throw new ValidationException("Se debe asignar productos a la venta");
 		}
+		this.setSeniaInicial(this.getSenia() != null ? this.getSenia() : BigDecimal.ZERO);
 		this.setSenia(BigDecimal.ZERO);
 		this.setRetirado(Boolean.TRUE);
     	this.getReceta().setEstado(Estado.Abierta);
 		this.calcularCampoCalculado();
-		
+	
 	}
 
 	@Override
