@@ -13,9 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 
+import javax.persistence.Column;
+
 import org.hibernate.validator.constraints.Length;
 import org.openxava.annotations.AddAction;
 import org.openxava.annotations.CloudHiddenTabReference;
+import org.openxava.annotations.OnChange;
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
 import org.openxava.annotations.ListProperties;
@@ -36,18 +39,19 @@ import org.openxava.negocio.calculators.DefaultValueCalculatorSucusal;
 import org.openxava.validators.ValidationException;
 
 @View(members="fecha, empresa, sucursal, retirado;"
-		+ "estado, numero;"
+		+ "estado, numero, puntoVenta, tipoComprobante;"
 		+ "cliente, receta;"
 		+ "medioDePago;"
 		+ "items;"
 		+ "Totales["
 		+ "totalSinDescuento, total;"
 		+ "senia, saldo, seniaInicial];"
+		+ "Facturacion[cae, fechaVencimientoCae, fechaConfirmacion];"
 		+ "observaciones")
 
 @Tab(
 	    filter=SucursalUsuarioFilter.class,
-	    properties="cliente.nombre, fecha, empresa.nombre, numero, estado, total, senia, saldo, totalSinDescuento, usuario, medioDePago.nombre, sucursal.nombre",
+	    properties="cliente.nombre, fecha, empresa.nombre, numero, puntoVenta.codigo, tipoComprobante, estado, total, senia, saldo, totalSinDescuento, cae, fechaVencimientoCae, fechaConfirmacion, usuario, medioDePago.nombre, sucursal.nombre",
 	    baseCondition=SucursalUsuarioFilter.BASECONDITION_FACTURASUCURSAL,
 	    defaultOrder="${fechaCreacion} desc"
 	)
@@ -102,6 +106,29 @@ public class FacturaVenta extends MovementTransactional{
 	
 	@ReadOnly
 	private BigDecimal seniaInicial;
+	
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@DescriptionsList(descriptionProperties="codigo, nombre")
+	@NoCreate @NoModify
+	@OnChange(org.openxava.negocio.base.actions.ValidarPuntoVentaAction.class)
+	@DefaultValueCalculator(org.openxava.negocio.calculators.DefaultValueCalculatorPuntoVenta.class)
+	private PuntoVenta puntoVenta;
+	
+	@Column(length=20)
+	@ReadOnly
+	private String cae;
+	
+	@ReadOnly
+	@Stereotype("DATE")
+	private Date fechaVencimientoCae;
+	
+	@Column(length=10)
+	@ReadOnly
+	private String tipoComprobante = "C";
+	
+	@ReadOnly
+	@Stereotype("DATETIME")
+	private Date fechaConfirmacion;
 
 	
     public BigDecimal getSeniaInicial() {
@@ -112,14 +139,14 @@ public class FacturaVenta extends MovementTransactional{
 		this.seniaInicial = seniaInicial;
 	}
 
-	// Método para inicializar datos al entrar al módulo
+	// Mï¿½todo para inicializar datos al entrar al mï¿½dulo
     @PostConstruct
     public void init() {
         this.setFecha(new Date());
-        this.setEstado(Estado.Abierta);
+        this.setEstado(Estado.Borrador);
     }
     
-    // Método para calcular el valor del campo calculado
+    // Mï¿½todo para calcular el valor del campo calculado
     @PostLoad
     public void calcularCampoCalculado() {
         BigDecimal totalItem = BigDecimal.ZERO;
@@ -144,6 +171,24 @@ public class FacturaVenta extends MovementTransactional{
         	this.getReceta().setEmpresa(this.getEmpresa());
         }
         
+        // Calcular tipo de comprobante
+        this.calcularTipoComprobante();
+    }
+    
+    private void calcularTipoComprobante() {
+    	try {
+    		// Monotributistas usan tipo C, responsables inscriptos tipo B
+    		String tipo = "C"; // Por defecto C para monotributistas
+    		
+    		if (this.getEmpresa() != null && !this.getEmpresa().esMonotributista()) {
+    			tipo = "B"; // Solo si NO es monotributista usar B
+    		}
+    		
+    		this.setTipoComprobante(tipo);
+    	} catch (Exception e) {
+    		// Si hay error, usar tipo C por defecto (monotributista)
+    		this.setTipoComprobante("C");
+    	}
     }
 	
 	public Sucursal getSucursal() {
@@ -234,17 +279,97 @@ public class FacturaVenta extends MovementTransactional{
 		this.observaciones = observaciones;
 	}
 
+	public PuntoVenta getPuntoVenta() {
+		return puntoVenta;
+	}
+
+	public void setPuntoVenta(PuntoVenta puntoVenta) {
+		this.puntoVenta = puntoVenta;
+	}
+
+	public String getCae() {
+		return cae;
+	}
+
+	public void setCae(String cae) {
+		this.cae = cae;
+	}
+
+	public Date getFechaVencimientoCae() {
+		return fechaVencimientoCae;
+	}
+
+	public void setFechaVencimientoCae(Date fechaVencimientoCae) {
+		this.fechaVencimientoCae = fechaVencimientoCae;
+	}
+
 	@Override
 	public void accionesPreConfirmar() {
 		if(this.getItems().isEmpty()){
 			throw new ValidationException("Se debe asignar productos a la venta");
 		}
+		
 		this.setSeniaInicial(this.getSenia() != null ? this.getSenia() : BigDecimal.ZERO);
 		this.setSenia(BigDecimal.ZERO);
 		this.setRetirado(Boolean.TRUE);
-    	this.getReceta().setEstado(Estado.Abierta);
+		
+		if(this.getReceta() != null) {
+			this.getReceta().setEstado(Estado.Abierta);
+		}
+		
 		this.calcularCampoCalculado();
+		this.calcularTipoComprobante();
+	}
 	
+	@Override
+	public void confirmar() {
+		System.out.println("[FacturaVenta.confirmar] Iniciando confirmacion de factura");
+		System.out.println("[FacturaVenta.confirmar] Numero actual: " + this.getNumero());
+		System.out.println("[FacturaVenta.confirmar] Tipo comprobante: " + this.getTipoComprobante());
+		System.out.println("[FacturaVenta.confirmar] Empresa ID: " + (this.getEmpresa() != null ? this.getEmpresa().getId() : "null"));
+		System.out.println("[FacturaVenta.confirmar] Sucursal ID: " + (this.getSucursal() != null ? this.getSucursal().getId() : "null"));
+		System.out.println("[FacturaVenta.confirmar] PuntoVenta ID: " + (this.getPuntoVenta() != null ? this.getPuntoVenta().getId() : "null"));
+		
+		// Asignar numeracion al confirmar
+		if(this.getNumero() == null || this.getNumero().isEmpty()) {
+			System.out.println("[FacturaVenta.confirmar] Asignando numeracion...");
+			String numeroAsignado = org.openxava.negocio.base.actions.AsignarNumeracionAction.asignarNumero(
+				"FacturaVenta", 
+				this.getEmpresa().getId(), 
+				this.getSucursal() != null ? this.getSucursal().getId() : null,
+				this.getPuntoVenta() != null ? this.getPuntoVenta().getId() : null,
+				this.getTipoComprobante()
+			);
+			this.setNumero(numeroAsignado);
+			System.out.println("[FacturaVenta.confirmar] Numero asignado: " + numeroAsignado);
+		} else {
+			System.out.println("[FacturaVenta.confirmar] Ya tiene numero asignado");
+		}
+		
+		// Establecer fecha de confirmacion
+		this.setFechaConfirmacion(new Date());
+		System.out.println("[FacturaVenta.confirmar] Fecha confirmacion establecida");
+		
+		// Llamar al metodo padre para cambiar estado
+		System.out.println("[FacturaVenta.confirmar] Llamando super.confirmar()...");
+		super.confirmar();
+		System.out.println("[FacturaVenta.confirmar] Confirmacion completada");
+	}
+	
+	public String getTipoComprobante() {
+		return tipoComprobante;
+	}
+	
+	public void setTipoComprobante(String tipoComprobante) {
+		this.tipoComprobante = tipoComprobante;
+	}
+	
+	public Date getFechaConfirmacion() {
+		return fechaConfirmacion;
+	}
+	
+	public void setFechaConfirmacion(Date fechaConfirmacion) {
+		this.fechaConfirmacion = fechaConfirmacion;
 	}
 
 	@Override
@@ -257,6 +382,4 @@ public class FacturaVenta extends MovementTransactional{
 	public void recalculateData() {
 		this.calcularCampoCalculado();
 	}
-	
-
 }

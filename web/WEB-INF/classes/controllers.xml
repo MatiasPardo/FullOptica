@@ -73,6 +73,51 @@
 	  			mode="detail"
 				class="org.openxava.negocio.base.actions.AnularMovimientoTransaccionalAccion">
 		</action>
+		<action name="generarPDF" 
+				mode="detail"
+				class="org.openxava.negocio.base.actions.GenerarPDFFacturaVentaAction"
+				image="pdf.gif"
+				icon="file-pdf">
+		</action>
+		<action name="solicitarCAE" 
+				mode="detail"
+				class="org.openxava.negocio.base.actions.SolicitarCAEAction"
+				image="cae.gif"
+				icon="certificate">
+		</action>
+	</controller>
+	
+	<controller name="Numerador">
+		<action name="consultarUltimo" 
+				mode="detail"
+				class="org.openxava.negocio.base.actions.ConsultarUltimoComprobanteAction"
+				image="search.gif"
+				icon="magnify">
+		</action>
+	</controller>
+	
+	<controller name="ImportadorFacturaCompra">
+		<action name="importar" 
+				mode="list"
+				class="org.openxava.negocio.base.actions.ImportarFacturaCompraAction"
+				image="import.gif"
+				icon="file-upload">
+		</action>
+	</controller>
+	
+	<controller name="ValidarPuntoVenta">
+		<action name="execute" 
+				class="org.openxava.negocio.base.actions.ValidarPuntoVentaAction">
+		</action>
+	</controller>
+	
+	<controller name="ConfiguracionEmpresa">
+		<action name="configurarDatos" 
+				mode="detail"
+				class="org.openxava.negocio.base.actions.ConfigurarEmpresaAction"
+				image="config.gif"
+				icon="settings">
+		</action>
 	</controller>
 	
 	

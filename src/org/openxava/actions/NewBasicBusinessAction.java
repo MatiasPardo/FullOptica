@@ -78,6 +78,8 @@ public class NewBasicBusinessAction extends NewAction{
 	        for(MetaMember member: collection){
 	        	this.getView().setHidden(member.getName(), true);
 	        }
+			removeActions("MovimientoTransaccional.anular");
+			addActions("BasicBusiness.save");
 		}
 		catch(Exception e){
 			addError("Error exclusión de atributos: " + e.toString());
@@ -105,5 +107,7 @@ public class NewBasicBusinessAction extends NewAction{
 	public void setNombreVistaAlCrear(String nombreVistaAlCrear) {
 		this.nombreVistaAlCrear = nombreVistaAlCrear;
 	}
+
+		
 }
 

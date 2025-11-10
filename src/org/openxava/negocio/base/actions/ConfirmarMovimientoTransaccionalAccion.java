@@ -11,27 +11,38 @@ public class ConfirmarMovimientoTransaccionalAccion extends SaveAction implement
 
 	@Override
 	public void execute() throws Exception {
+		System.out.println("[ConfirmarMovimiento] Iniciando confirmacion - Modelo: " + getView().getModelName());
 		try {
 			MovementTransactional tr = (MovementTransactional)MapFacade.findEntity(getView().getModelName(), getView().getKeyValues());
+			System.out.println("[ConfirmarMovimiento] Entidad encontrada: " + (tr != null ? tr.getClass().getSimpleName() : "null"));
 			
 			if(tr == null) throw new ValidationException("Primero debe grabar");
+			System.out.println("[ConfirmarMovimiento] Estado actual: " + tr.getEstado());
 			if(tr.getEstado().equals(Estado.Confirmada) || tr.getEstado().equals(Estado.Anulada)){
 				throw new ValidationException("La Factura no tiene un estado valido para confirmar");
 			}
 			
+			System.out.println("[ConfirmarMovimiento] Ejecutando accionesPreConfirmar...");
 			tr.accionesPreConfirmar();
+			System.out.println("[ConfirmarMovimiento] Primer commit...");
 			this.commit();
 			
+			System.out.println("[ConfirmarMovimiento] Refrescando entidad...");
 			tr = (MovementTransactional)MapFacade.findEntity(getView().getModelName(), getView().getKeyValues());
 
 			if (this.getErrors().isEmpty()){
+				System.out.println("[ConfirmarMovimiento] Ejecutando confirmar()...");
 				tr.confirmar();
 				Estado trEstado = tr.getEstado();
+				System.out.println("[ConfirmarMovimiento] Estado despues de confirmar: " + trEstado);
+				System.out.println("[ConfirmarMovimiento] Segundo commit...");
 				this.commit();
 				if(trEstado.equals(Estado.Confirmada)) this.addMessage("Se confirmo la transaccion con exito, gracias por sumar otra venta xD");
 				else this.addError("No se pudo confirmar, revise los datos");
 			}
 		}catch(Exception e){
+			System.err.println("[ConfirmarMovimiento] ERROR: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+			e.printStackTrace();
 			this.rollback();
 			
 			if (e.getMessage() != null){

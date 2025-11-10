@@ -16,6 +16,7 @@ public class StateViewActionChange extends ViewBaseAction {
 			if(estado != null && estado.equals(Estado.Confirmada)){
 				//showAction("");
 				removeActions("BasicBusiness.save");
+				addActions("MovimientoTransaccional.anular");
 			}
 		}
         		

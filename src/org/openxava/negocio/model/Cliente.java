@@ -9,6 +9,9 @@ import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 
 import org.openxava.annotations.DefaultValueCalculator;
+import org.openxava.annotations.DescriptionsList;
+import org.openxava.annotations.NoCreate;
+import org.openxava.annotations.NoModify;
 import org.openxava.annotations.Stereotype;
 import org.openxava.annotations.View;
 import org.openxava.annotations.Views;
@@ -19,6 +22,7 @@ import org.openxava.validators.ValidationException;
 @Views({
 	@View(members="nombre, apellido, numeroDocumento;"
 			+ "edad, correoElectronico, codigo;"
+			+ "posicionIva;"
 			+ "domicilio;"
 			+ "Auditoria[fechaCreacion, fechaModificacion; inactivo]"),
 	@View(name="simple", members="nombre, apellido, edad, numeroDocumento;")
@@ -44,6 +48,11 @@ public class Cliente extends BasicBusiness{
 	public String numeroDocumento;
 	
 	private Boolean inactivo;
+	
+	@ManyToOne(optional=true, fetch=FetchType.LAZY)
+	@DescriptionsList(descriptionProperties="codigo, descripcion")
+	@NoCreate @NoModify
+	private PosicionIva posicionIva;
 
 	public String getNumeroDocumento() {
 		return numeroDocumento;
@@ -111,5 +120,19 @@ public class Cliente extends BasicBusiness{
 		throw new ValidationException("No se puede eliminar, en cambio se debe marcar como inactivo");
 	}
 
+	public PosicionIva getPosicionIva() {
+		return posicionIva;
+	}
+
+	public void setPosicionIva(PosicionIva posicionIva) {
+		this.posicionIva = posicionIva;
+	}
 	
+	public PosicionIva getPosicionIvaEfectiva() {
+		if (this.posicionIva != null) {
+			return this.posicionIva;
+		}
+		// Por defecto consumidor final
+		return PosicionIva.consumidorFinal();
+	}
 }

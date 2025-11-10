@@ -101,15 +101,23 @@ public class EditBasicBusinessAction extends SearchByViewKeyAction{//extends Sea
         if(bo instanceof MovementTransactional){
         	Estado estado = ((MovementTransactional) bo).getEstado();
 			if(estado != null && estado.equals(Estado.Confirmada)){
-
 				removeActions("BasicBusiness.save");
 				removeActions("MovimientoTransaccional.confirmar");
+				addActions("MovimientoTransaccional.anular");
 			}
 			if(estado != null && estado.equals(Estado.Anulada)) {
 				removeActions("MovimientoTransaccional.confirmar");
+				removeActions("BasicBusiness.save");
 			}
 			if(estado != null && estado.equals(Estado.Borrador)) {
 				removeActions("MovimientoTransaccional.anular");
+				addActions("BasicBusiness.save");
+				addActions("MovimientoTransaccional.confirmar");
+
+			}
+			if(estado == null){
+				addActions("BasicBusiness.save");
+				addActions("MovimientoTransaccional.confirmar");
 			}
 		}		
 	}

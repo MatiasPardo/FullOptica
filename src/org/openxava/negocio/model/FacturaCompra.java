@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 
 import org.hibernate.validator.constraints.Length;
+import org.openxava.annotations.AddAction;
 import org.openxava.annotations.CloudHiddenTabReference;
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
@@ -21,6 +22,9 @@ import org.openxava.annotations.ListProperties;
 import org.openxava.annotations.NoCreate;
 import org.openxava.annotations.NoModify;
 import org.openxava.annotations.ReadOnly;
+import org.openxava.annotations.RemoveAction;
+import org.openxava.annotations.RemoveSelectedAction;
+import org.openxava.annotations.SaveAction;
 import org.openxava.annotations.Stereotype;
 import org.openxava.annotations.Tab;
 import org.openxava.annotations.View;
@@ -51,8 +55,9 @@ public class FacturaCompra extends MovementTransactional{
 	@CloudHiddenTabReference
 	private Proveedor proveedor;
 	
-	@OneToMany(mappedBy="compra", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="compra", cascade=CascadeType.ALL, orphanRemoval=true)
 	@ListProperties("producto.codigo, producto.nombre, cantidad, descuento, precio, subTotal")	
+
 	private Collection<ItemFacturaCompra> items;
 			
 	@ReadOnly
@@ -73,14 +78,14 @@ public class FacturaCompra extends MovementTransactional{
 	@DefaultValueCalculator(DefaultValueCalculatorSucusal.class)
 	private Sucursal sucursal;
 	
-    // Método para inicializar datos al entrar al módulo
+    // Mï¿½todo para inicializar datos al entrar al mï¿½dulo
     @PostConstruct
     public void init() {
         this.setFecha(new Date());
         this.setEstado(Estado.Abierta);   
     }
     
-    // Método para calcular el valor del campo calculado
+    // Mï¿½todo para calcular el valor del campo calculado
     @PostLoad
     public void calcularCampoCalculado() {
         BigDecimal totalItem = BigDecimal.ZERO;
