@@ -364,6 +364,10 @@ public class FacturaVenta extends MovementTransactional{
 		this.tipoComprobante = tipoComprobante;
 	}
 	
+	public int getCodigoAfip() {
+		return TipoComprobanteAfip.porCodigo(this.getTipoComprobante()).getCodigoAfip();
+	}
+	
 	public Date getFechaConfirmacion() {
 		return fechaConfirmacion;
 	}

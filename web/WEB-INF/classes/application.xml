@@ -1,1 +1,67 @@
-<?xml version = "1.0" encoding = "ISO-8859-1"?><!DOCTYPE application SYSTEM "dtds/application.dtd"><application name="FullOptica"> 		<!-- 	A default module for each entity is assumed with the	controllers on <default-module/>	-->	<default-module>		  		<controller name="BasicBusiness"/>			</default-module>		<module name="FacturaVenta">		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>    	<model name="FacturaVenta" />    	<controller name="BasicBusiness"/>    	<controller name="MovimientoTransaccional"/>    </module>        <module name="FacturaCompra">		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>    	<model name="FacturaCompra" />    	<controller name="BasicBusiness"/>    	<controller name="MovimientoTransaccional"/>    	<controller name="ImportadorFacturaCompra"/>    </module>        <module name="RecetaMedica">		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>    	<model name="RecetaMedica" />    	<controller name="BasicBusiness"/>    	<controller name="MovimientoTransaccional"/>    </module>        <module name="Numerador">		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>    	<model name="Numerador" />    	<controller name="BasicBusiness"/>    	<controller name="Numerador"/>    </module>        <module name="PuntoVenta">		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>    	<model name="PuntoVenta" />    	<controller name="BasicBusiness"/>    </module>        <module name="Empresa">		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>    	<model name="Empresa" />    	<controller name="BasicBusiness"/>    	<controller name="ConfiguracionEmpresa"/>    </module>    	<!-- 	You can define additional modules, for example:	  	<module name="OnlyReadTeacher">		<model name="Teacher"/>		<controller name="Print"/>	</module>			-->	</application>
+<?xml version = "1.0" encoding = "ISO-8859-1"?>
+
+<!DOCTYPE application SYSTEM "dtds/application.dtd">
+
+<application name="FullOptica"> 
+	
+	<!-- 
+	A default module for each entity is assumed with the
+	controllers on <default-module/>
+	-->
+	<default-module>		  
+		<controller name="BasicBusiness"/>		
+	</default-module>
+	
+	<module name="FacturaVenta">
+		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>
+    	<model name="FacturaVenta" />
+    	<controller name="BasicBusiness"/>
+    	<controller name="MovimientoTransaccional"/>
+    </module>
+    
+    <module name="FacturaCompra">
+		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>
+    	<model name="FacturaCompra" />
+    	<controller name="BasicBusiness"/>
+    	<controller name="MovimientoTransaccional"/>
+    	<controller name="ImportadorFacturaCompra"/>
+    </module>
+    
+    <module name="RecetaMedica">
+		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>
+    	<model name="RecetaMedica" />
+    	<controller name="BasicBusiness"/>
+    	<controller name="MovimientoTransaccional"/>
+    </module>
+    
+    <module name="Numerador">
+		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>
+    	<model name="Numerador" />
+    	<controller name="BasicBusiness"/>
+    	<controller name="Numerador"/>
+    </module>
+    
+    <module name="PuntoVenta">
+		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>
+    	<model name="PuntoVenta" />
+    	<controller name="BasicBusiness"/>
+    </module>
+    
+    <module name="Empresa">
+		<env-var name="XAVA_SEARCH_ACTION" value="BasicBusiness.edit"/>
+    	<model name="Empresa" />
+    	<controller name="BasicBusiness"/>
+    	<controller name="ConfiguracionEmpresa"/>
+    </module>
+    
+
+
+	<!-- 
+	You can define additional modules, for example:	  
+	<module name="OnlyReadTeacher">
+		<model name="Teacher"/>
+		<controller name="Print"/>
+	</module>		
+	-->
+	
+</application>

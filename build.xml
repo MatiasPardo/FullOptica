@@ -15,12 +15,29 @@
 		<ant antfile="${openxava.base.dir}/OpenXava/build.xml" target="compile"/>
 	</target>	    	
 	
+	<!-- Copy reports and classes to web -->
+	<target name="copyReports">
+		<echo message="Copiando reportes y clases..."/>
+		<copy todir="web/WEB-INF/classes/reports" overwrite="true">
+			<fileset dir="reports">
+				<include name="**/*.jrxml"/>
+			</fileset>
+		</copy>
+		<copy todir="web/WEB-INF/classes" overwrite="true">
+			<fileset dir="src">
+				<include name="**/*.class"/>
+				<include name="**/*.properties"/>
+			</fileset>
+		</copy>
+		<echo message="Reportes y clases copiados exitosamente"/>
+	</target>
+	
 	<!-- 
 	Build and deploy the application in war format. 
 	It deploys it on the Tomcat included in OpenXava distribution, 
 	to deploy to other location modify the tomcat.dir property of workspace/openxava.properties.
 	-->	
-    <target name="deployWar">
+    <target name="deployWar" depends="copyReports">
 		<!-- In a directory -->
 		<ant antfile="${openxava.base.dir}/OpenXava/build.xml" target="deploy"/>
 		<!-- In a file (it does not work well on windows + tomcat)
@@ -32,7 +49,7 @@
 	Build the application in war format.
 	Leaves the war in the workspace.dist/YourApplication.dist folder.
 	 -->	
-	<target name="createWar">
+	<target name="createWar" depends="copyReports">
 		<ant antfile="${openxava.base.dir}/OpenXava/build.xml" target="createWar"/>
 	</target>				
 

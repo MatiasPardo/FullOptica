@@ -1,6 +1,7 @@
 package org.openxava.negocio.model;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -8,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.FlushModeType;
 import javax.persistence.OneToMany;
 import javax.persistence.Query;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.openxava.annotations.ListProperties;
 import org.openxava.annotations.Stereotype;
@@ -16,7 +19,7 @@ import org.openxava.jpa.XPersistence;
 import org.openxava.negocio.base.BasicBusiness;
 
 @Entity
-@View(members="nombre, codigo; principal; " +
+@View(members="nombre, codigo; principal; fechaInicioActividades; " +
 		"DatosFiscales[cuit, razonSocial; condicionIva, monotributista, ingresosBrutos]; " +
 		"Domicilio[direccion, ciudad]; " +
 		"sucursales")
@@ -66,6 +69,9 @@ public class Empresa extends BasicBusiness {
 	
 	@Column(length=20)
 	private String telefono;
+	
+	@Temporal(TemporalType.DATE)
+	private Date fechaInicioActividades;
 	
 	@OneToMany(mappedBy="empresa", cascade=CascadeType.ALL)
 	@ListProperties("nombre, codigo")	
@@ -157,6 +163,14 @@ public class Empresa extends BasicBusiness {
 
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+	
+	public Date getFechaInicioActividades() {
+		return fechaInicioActividades;
+	}
+
+	public void setFechaInicioActividades(Date fechaInicioActividades) {
+		this.fechaInicioActividades = fechaInicioActividades;
 	}
 	
 	public boolean esMonotributista() {

@@ -3,6 +3,8 @@ package org.openxava.negocio.base.adapters;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -180,8 +182,17 @@ public class ARCAWebServiceAdapter {
     private static String crearJsonRequest(FacturaVenta factura) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         
-        // Extraer solo el numero sin prefijo (parte despues del guion)
         String numeroSinPrefijo = extraerNumeroSinPrefijo(factura.getNumero());
+        
+        // Calcular IVA basado en si es monotributista
+        BigDecimal importeNeto = factura.getTotal();
+        BigDecimal importeIVA = BigDecimal.ZERO;
+        
+        if (!factura.getEmpresa().esMonotributista()) {
+            // Para responsables inscriptos: calcular IVA 21%
+            importeNeto = factura.getTotal().divide(new BigDecimal("1.21"), 2, RoundingMode.HALF_UP);
+            importeIVA = factura.getTotal().subtract(importeNeto);
+        }
         
         StringBuilder json = new StringBuilder();
         json.append("{");
@@ -189,7 +200,26 @@ public class ARCAWebServiceAdapter {
         json.append("\"tipoComprobante\":").append(convertirTipoComprobante(factura.getTipoComprobante())).append(",");
         json.append("\"numeroComprobante\":").append(numeroSinPrefijo).append(",");
         json.append("\"importeTotal\":").append(factura.getTotal()).append(",");
+        json.append("\"importeNeto\":").append(importeNeto).append(",");
+        json.append("\"importeIVA\":").append(importeIVA).append(",");
         json.append("\"fechaComprobante\":\"").append(sdf.format(factura.getFecha())).append("\"");
+        
+        // Agregar datos del cliente
+        if (factura.getCliente().getCuit() != null && !factura.getCliente().getCuit().trim().isEmpty()) {
+            json.append(",\"numeroDocumento\":\"").append(factura.getCliente().getCuit().trim()).append("\"");
+            json.append(",\"tipoDocumento\":80"); // CUIT
+        } else if (factura.getCliente().getNumeroDocumento() != null && !factura.getCliente().getNumeroDocumento().trim().isEmpty()) {
+            json.append(",\"numeroDocumento\":\"").append(factura.getCliente().getNumeroDocumento().trim()).append("\"");
+            json.append(",\"tipoDocumento\":96"); // DNI
+        } else {
+            json.append(",\"tipoDocumento\":99"); // sin nro
+        }
+        
+        // Agregar denominacion del receptor (siempre)
+        String denominacion = (factura.getCliente().getApellido() != null ? factura.getCliente().getApellido() : "") + 
+                             (factura.getCliente().getNombre() != null ? " " + factura.getCliente().getNombre() : "");
+        json.append(",\"denominacionReceptor\":\"").append(denominacion.trim()).append("\"");
+        
         json.append("}");
         
         return json.toString();

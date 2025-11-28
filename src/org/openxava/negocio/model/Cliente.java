@@ -22,6 +22,7 @@ import org.openxava.validators.ValidationException;
 @Views({
 	@View(members="nombre, apellido, numeroDocumento;"
 			+ "edad, correoElectronico, codigo;"
+			+ "cuit;"
 			+ "posicionIva;"
 			+ "domicilio;"
 			+ "Auditoria[fechaCreacion, fechaModificacion; inactivo]"),
@@ -47,6 +48,8 @@ public class Cliente extends BasicBusiness{
 	
 	public String numeroDocumento;
 	
+	public String cuit;
+	
 	private Boolean inactivo;
 	
 	@ManyToOne(optional=true, fetch=FetchType.LAZY)
@@ -60,6 +63,14 @@ public class Cliente extends BasicBusiness{
 
 	public void setNumeroDocumento(String numeroDocumento) {
 		this.numeroDocumento = numeroDocumento;
+	}
+
+	public String getCuit() {
+		return cuit;
+	}
+
+	public void setCuit(String cuit) {
+		this.cuit = cuit;
 	}
 
 	public String getCorreoElectronico() {
@@ -134,5 +145,15 @@ public class Cliente extends BasicBusiness{
 		}
 		// Por defecto consumidor final
 		return PosicionIva.consumidorFinal();
+	}
+
+	public String getNombreCompleto() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getDireccion() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

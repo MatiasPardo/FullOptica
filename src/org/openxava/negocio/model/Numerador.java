@@ -52,6 +52,11 @@ public class Numerador extends BasicBusiness {
     @Column(length=10)
     private String tipoComprobante = "C";
     
+    // Método para obtener el código AFIP
+    public int getCodigoAfip() {
+        return TipoComprobanteAfip.porCodigo(this.getTipoComprobante()).getCodigoAfip();
+    }
+    
     @DefaultValueCalculator(IntegerCalculator.class)
     @Required
     private Long proximoNumero;
@@ -164,12 +169,7 @@ public class Numerador extends BasicBusiness {
     }
 
     public String getTipoComprobanteDescripcion() {
-        switch (this.getTipoComprobante().toUpperCase()) {
-            case "A": return "Factura A";
-            case "B": return "Factura B";
-            case "C": return "Factura C";
-            default: return "Factura " + this.getTipoComprobante();
-        }
+        return TipoComprobanteAfip.porCodigo(this.getTipoComprobante()).getDescripcion();
     }
 
     public String obtenerSiguienteNumero() {

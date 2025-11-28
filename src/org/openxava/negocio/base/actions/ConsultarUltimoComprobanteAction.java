@@ -31,9 +31,9 @@ public class ConsultarUltimoComprobanteAction extends ViewBaseAction {
         }
         
         String puntoVenta = numerador.getPuntoVenta().getCodigo();
-        String tipoComprobante = numerador.getTipoComprobante() != null ? numerador.getTipoComprobante() : "C";
+        String tipoComprobante = String.valueOf(numerador.getCodigoAfip());
         
-        System.out.println("[ConsultarUltimo] Consultando PV: " + puntoVenta + ", Tipo: " + tipoComprobante);
+        System.out.println("[ConsultarUltimo] Consultando PV: " + puntoVenta + ", Código AFIP: " + tipoComprobante);
         
         try {
             ARCAWebServiceAdapter.UltimoComprobanteResponse response = 

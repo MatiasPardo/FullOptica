@@ -67,7 +67,7 @@
 	 <controller name="MovimientoTransaccional">
 	  	<action name="confirmar" 
 	  			mode="detail"
-				class="org.openxava.negocio.base.actions.ConfirmarMovimientoTransaccionalAccion">
+				class="org.openxava.negocio.base.actions.ConfirmarYSolicitarCAEAction">
 		</action>
 		<action name="anular" 
 	  			mode="detail"
