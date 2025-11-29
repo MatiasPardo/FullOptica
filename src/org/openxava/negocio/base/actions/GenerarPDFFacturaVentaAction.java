@@ -87,7 +87,8 @@ public class GenerarPDFFacturaVentaAction extends ViewBaseAction implements IFor
         parameters.put("date", new java.text.SimpleDateFormat("dd/MM/yyyy").format(factura.getFecha()));
         parameters.put("customer", factura.getCliente().getNombre() + " " + factura.getCliente().getApellido());
         parameters.put("address", factura.getCliente().getDomicilio().getCalle() + " " + factura.getCliente().getDomicilio().getNumero());
-        parameters.put("clienteCondicionIva", factura.getCliente().getPosicionIva().getDescripcion());
+        parameters.put("clienteCondicionIva", factura.getCliente().getPosicionIva() != null ? 
+            factura.getCliente().getPosicionIva().getDescripcion() : "Consumidor Final");
         parameters.put("customerNombre", factura.getCliente().getNombre() + " " + factura.getCliente().getApellido());
         parameters.put("customerAddress", factura.getCliente().getDomicilio().getCalle() + " " + factura.getCliente().getDomicilio().getNumero());
         parameters.put("docNro", factura.getCliente().getCuit() != null ? factura.getCliente().getCuit() : "");
@@ -110,7 +111,9 @@ public class GenerarPDFFacturaVentaAction extends ViewBaseAction implements IFor
         parameters.put("empresaCondicionIva", factura.getEmpresa().getCondicionIva());
         parameters.put("puntoVenta", factura.getPuntoVenta().getCodigo());
         parameters.put("cae", factura.getCae());
-        parameters.put("dateCae", new SimpleDateFormat("dd/MM/yyyy").format(factura.getFechaVencimientoCae()));
+        parameters.put("dateCae", factura.getFechaVencimientoCae() != null ? 
+            new SimpleDateFormat("dd/MM/yyyy").format(factura.getFechaVencimientoCae()) : 
+            new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         
         // Crear datasource con items de la factura
         List<Map<String, Object>> itemsData = new ArrayList<>();

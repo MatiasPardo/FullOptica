@@ -111,7 +111,7 @@ public class FacturaVenta extends MovementTransactional{
 	@DescriptionsList(descriptionProperties="codigo, nombre")
 	@NoCreate @NoModify
 	@OnChange(org.openxava.negocio.base.actions.ValidarPuntoVentaAction.class)
-	@DefaultValueCalculator(org.openxava.negocio.calculators.DefaultValueCalculatorPuntoVenta.class)
+	@DefaultValueCalculator(org.openxava.negocio.calculators.DefaultValueCalculatorPuntoVentaPrincipal.class)
 	private PuntoVenta puntoVenta;
 	
 	@Column(length=20)

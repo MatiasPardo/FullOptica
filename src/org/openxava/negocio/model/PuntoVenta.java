@@ -18,8 +18,8 @@ import org.openxava.negocio.base.BasicBusiness;
 
 
 @Entity
-@View(members="codigo, nombre; empresa, sucursal; tipo, electronico")
-@Tab(properties="codigo, nombre, empresa.nombre, sucursal.nombre, tipo, electronico")
+@View(members="codigo, nombre; empresa, sucursal; tipo, electronico, principal")
+@Tab(properties="codigo, nombre, empresa.nombre, sucursal.nombre, tipo, electronico, principal")
 public class PuntoVenta extends BasicBusiness {
 
     @Column(length=10)
@@ -43,6 +43,9 @@ public class PuntoVenta extends BasicBusiness {
     
     @DefaultValueCalculator(FalseCalculator.class)
     private Boolean electronico = false;
+    
+    @DefaultValueCalculator(FalseCalculator.class)
+    private Boolean principal = false;
     
     private TipoPuntoVenta tipo = TipoPuntoVenta.Manual;
 
@@ -93,6 +96,13 @@ public class PuntoVenta extends BasicBusiness {
     public void setTipo(TipoPuntoVenta tipo) {
         this.tipo = tipo;
     }
+    
+    public Boolean getPrincipal() {
+        return principal == null ? false : principal;
+    }
 
+    public void setPrincipal(Boolean principal) {
+        this.principal = principal;
+    }
 
 }

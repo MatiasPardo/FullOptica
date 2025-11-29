@@ -7,9 +7,11 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
+import javax.persistence.Transient;
 
 import org.openxava.annotations.DefaultValueCalculator;
 import org.openxava.annotations.DescriptionsList;
+import org.openxava.annotations.Hidden;
 import org.openxava.annotations.NoCreate;
 import org.openxava.annotations.NoModify;
 import org.openxava.annotations.Stereotype;
@@ -17,6 +19,7 @@ import org.openxava.annotations.View;
 import org.openxava.annotations.Views;
 import org.openxava.negocio.base.BasicBusiness;
 import org.openxava.negocio.calculators.DefaultValueCalculatorDomicilio;
+import org.openxava.negocio.calculators.DefaultValueCalculatorPosicionIva;
 import org.openxava.validators.ValidationException;
 
 @Views({
@@ -54,6 +57,7 @@ public class Cliente extends BasicBusiness{
 	
 	@ManyToOne(optional=true, fetch=FetchType.LAZY)
 	@DescriptionsList(descriptionProperties="codigo, descripcion")
+	@DefaultValueCalculator(DefaultValueCalculatorPosicionIva.class)
 	@NoCreate @NoModify
 	private PosicionIva posicionIva;
 
@@ -139,6 +143,8 @@ public class Cliente extends BasicBusiness{
 		this.posicionIva = posicionIva;
 	}
 	
+	@Hidden
+	@Transient
 	public PosicionIva getPosicionIvaEfectiva() {
 		if (this.posicionIva != null) {
 			return this.posicionIva;
